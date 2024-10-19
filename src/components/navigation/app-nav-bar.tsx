@@ -50,6 +50,9 @@ export function AppNavBar() {
             </Link>
           </NavbarMenuItem>
         ))}
+        <NavbarItem>
+          <Button> Sign In </Button>
+        </NavbarItem>
       </NavbarMenu>
     </Navbar>
   );
