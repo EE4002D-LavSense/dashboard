@@ -1,7 +1,12 @@
+import DashboardTable from "@/components/table/dashboard-table";
+
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold">Dashboard</h1>
-    </div>
+    <>
+      <h1 className="text-4xl font-bold m-10">Dashboard</h1>
+      <div className="flex flex-col items-center h-screen m-10">
+        <DashboardTable />
+      </div>
+    </>
   );
 }
