@@ -21,14 +21,14 @@ export function AppNavBar() {
   const pathname = usePathname();
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl" isBordered>
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" isBordered>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link href="/" className="text-2xl font-bold" color="foreground">
+          <Link href="/" className="text-3xl font-bold" color="foreground">
             LavSense
           </Link>
         </NavbarBrand>
