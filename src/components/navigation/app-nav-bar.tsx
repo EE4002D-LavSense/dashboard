@@ -28,7 +28,9 @@ export function AppNavBar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <h1 className="text-2xl font-bold">LavSense</h1>
+          <Link href="/" className="text-2xl font-bold" color="foreground">
+            LavSense
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
