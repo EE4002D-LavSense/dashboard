@@ -17,14 +17,14 @@ import { ToiletDashboardData } from "@/lib/definitions";
 
 const occupancyColorMap: Record<string, ChipProps["color"]> = {
   Free: "success",
-  Busy: "danger",
-  Full: "warning",
+  Busy: "warning",
+  Full: "danger",
 };
 
 const smellColorMap: Record<string, ChipProps["color"]> = {
   Good: "success",
-  Moderate: "danger",
-  Bad: "warning",
+  Moderate: "warning",
+  Bad: "danger",
 };
 
 const genderColorMap: Record<string, String> = {
@@ -90,7 +90,7 @@ export default function DashboardTable() {
           return cellValue;
       }
     },
-    []
+    [],
   );
 
   return (
