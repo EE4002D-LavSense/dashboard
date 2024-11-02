@@ -19,7 +19,7 @@ export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="xl" isBordered>
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl" isBordered>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
