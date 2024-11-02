@@ -14,9 +14,11 @@ import {
 import React, { useState } from "react";
 
 import { navBarItems } from "@/lib/navigation/constants";
+import { usePathname } from "next/navigation";
 
 export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="2xl" isBordered>
@@ -32,8 +34,11 @@ export function AppNavBar() {
 
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         {navBarItems.map((navItem) => (
-          <NavbarItem key={navItem.href}>
-            <Link href={navItem.href} color="foreground">
+          <NavbarItem key={navItem.href} isActive={navItem.href === pathname}>
+            <Link
+              href={navItem.href}
+              color={navItem.href === pathname ? "primary" : "foreground"}
+            >
               {navItem.name}
             </Link>
           </NavbarItem>
@@ -45,7 +50,11 @@ export function AppNavBar() {
       <NavbarMenu>
         {navBarItems.map((navItem) => (
           <NavbarMenuItem key={navItem.href}>
-            <Link href={navItem.href} color="foreground" className="w-full">
+            <Link
+              href={navItem.href}
+              color={navItem.href === pathname ? "primary" : "foreground"}
+              className="w-full"
+            >
               {navItem.name}
             </Link>
           </NavbarMenuItem>
