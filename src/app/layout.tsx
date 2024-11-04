@@ -3,7 +3,11 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
-import { Providers } from "./providers";
+import { Providers } from "@/lib/providers/nextui-provider";
+import { MapProvider } from "@/lib/providers/map-provider";
+
+import { AppShell } from "@/components/layouts/app-shell";
+import { AppNavBar } from "@/components/navigation/app-nav-bar";
 
 import { cn } from "@/lib/tailwind/utils";
 
@@ -22,7 +26,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(inter.variable, "light")}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <MapProvider>
+            <AppShell>
+              <AppNavBar />
+              {children}
+            </AppShell>
+          </MapProvider>
+        </Providers>
         <Toaster richColors />
       </body>
     </html>
