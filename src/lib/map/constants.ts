@@ -17,3 +17,31 @@ export const defaultMapOptions = {
   gestureHandling: "auto",
   mapTypeId: "roadmap",
 };
+
+// Sample data with multiple locations and toilets
+export const locationsData = [
+  {
+    id: "E2",
+    name: "E2 Block",
+    position: { lat: 1.299361111111111, lng: 103.77119444444445 },
+    toilets: [
+      { floor: 1, type: "MALE" },
+      { floor: 2, type: "FEMALE" },
+      { floor: 3, type: "MALE" },
+      { floor: 4, type: "FEMALE" },
+      { floor: 5, type: "MALE" },
+      { floor: 6, type: "FEMALE" },
+    ],
+  },
+  {
+    id: "E5",
+    name: "E5 Block",
+    position: { lat: 1.2979141676258208, lng: 103.77248251375033 },
+    toilets: [
+      { floor: 1, type: "MALE" },
+      { floor: 2, type: "FEMALE" },
+      { floor: 3, type: "FEMALE" },
+    ],
+  },
+  // Add more blocks as needed
+];
