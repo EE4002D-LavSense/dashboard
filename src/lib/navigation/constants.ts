@@ -9,6 +9,11 @@ export const navBarItems: {
     public: true,
   },
   {
+    name: "Map",
+    href: "/map",
+    public: true,
+  },
+  {
     name: "Admin",
     href: "/admin",
   },
