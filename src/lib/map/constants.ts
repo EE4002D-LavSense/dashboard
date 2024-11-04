@@ -45,3 +45,10 @@ export const locationsData = [
   },
   // Add more blocks as needed
 ];
+
+export const color = {
+  "google-blue 100": `#4285F4`,
+  "google-blue-dark 100": `#61a0bf`,
+  "google-blue-light 100": `#1bb6ff`,
+  "white 100": `rgb(255,255,255)`,
+};
