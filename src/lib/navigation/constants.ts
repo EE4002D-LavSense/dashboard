@@ -18,6 +18,11 @@ export const navBarItems: {
     href: "/admin",
   },
   {
+    name: "Feedback",
+    href: "/feedback",
+    public: true,
+  },
+  {
     name: "Contact",
     href: "/contact",
     public: true,

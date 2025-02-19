@@ -1,0 +1,1 @@
+ALTER TABLE "report_files" ALTER COLUMN "file_path" DROP NOT NULL;
