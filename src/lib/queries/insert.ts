@@ -1,6 +1,11 @@
 import { db } from "@/lib/db";
 
-import { reportFilesTable, reportsTable, toiletsTable } from "@/lib/db/schema";
+import {
+  apiLogsTable,
+  reportFilesTable,
+  reportsTable,
+  toiletsTable,
+} from "@/lib/db/schema";
 import { ToiletInfo } from "@/lib/definitions";
 import { getReportId } from "./select";
 
@@ -25,4 +30,12 @@ export async function addFeedback(data: FormData) {
   photos.forEach(async (filePath: string) => {
     await db.insert(reportFilesTable).values({ reportId, filePath });
   });
+}
+
+export async function addApiLog(data: {
+  method: string;
+  data: string;
+  status: string;
+}) {
+  await db.insert(apiLogsTable).values(data);
 }

@@ -39,3 +39,11 @@ export const reportFilesTable = pgTable("report_files", {
     .notNull(),
   filePath: varchar("file_path", { length: 255 }).notNull(), // Store file path or URL
 });
+
+export const apiLogsTable = pgTable("api_logs", {
+  id: serial("id").primaryKey(),
+  method: varchar("method", { length: 10 }).notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  data: text("data").notNull(),
+  status: varchar("status", { length: 10 }).notNull(),
+});
