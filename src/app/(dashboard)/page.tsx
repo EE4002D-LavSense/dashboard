@@ -1,10 +1,10 @@
-import DashboardTable from "@/components/table/dashboard-table";
+import DashboardTable from "@/app/(dashboard)/_components/dashboard-table";
 
 export default function DashboardPage() {
   return (
     <>
-      <h1 className="text-4xl font-bold m-10">Dashboard</h1>
-      <div className="flex flex-col items-center h-screen m-10">
+      <h1 className="m-10 text-4xl font-bold">Dashboard</h1>
+      <div className="m-10 flex h-screen flex-col items-center">
         <DashboardTable />
       </div>
     </>

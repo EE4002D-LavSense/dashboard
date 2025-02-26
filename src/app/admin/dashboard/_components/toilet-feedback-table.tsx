@@ -9,7 +9,7 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import { reportsMockData } from "./mock-reports";
+import { reportsMockData } from "@/components/table/mock-reports";
 import { ToiletReportData } from "@/lib/definitions";
 
 const reports_columns = [

@@ -1,4 +1,4 @@
-import ToiletFeedbackTable from "@/components/table/toilet-feedback-table";
+import ToiletFeedbackTable from "@/app/admin/dashboard/_components/toilet-feedback-table";
 
 export default function AdminDashboardPage() {
   return (

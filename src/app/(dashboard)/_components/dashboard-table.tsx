@@ -11,8 +11,8 @@ import {
   Chip,
   ChipProps,
 } from "@nextui-org/react";
-import { dashboard_columns } from "./contants";
-import { mockData } from "./mock-data";
+import { dashboard_columns } from "@/components/table/contants";
+import { mockData } from "@/components/table/mock-data";
 import { ToiletDashboardData } from "@/lib/definitions";
 
 const occupancyColorMap: Record<string, ChipProps["color"]> = {
