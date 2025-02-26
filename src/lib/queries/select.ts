@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 
-import { reportsTable, toiletsTable } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { apiLogsTable, reportsTable, toiletsTable } from "@/lib/db/schema";
+import { eq, and, desc } from "drizzle-orm";
 
 export async function getToilet(building: string, floor: string, type: string) {
   if (!building || !floor || !type) {
@@ -41,4 +41,11 @@ export async function getReportId(
       ),
     );
   return res[0].id;
+}
+
+export async function getAllLogs() {
+  return await db
+    .select()
+    .from(apiLogsTable)
+    .orderBy(desc(apiLogsTable.timestamp));
 }

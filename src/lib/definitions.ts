@@ -22,3 +22,11 @@ export type ToiletReportData = {
   remarks?: string;
   createdAt: string;
 };
+
+export type LogData = {
+  id: number;
+  method: string;
+  timestamp: string;
+  data: string;
+  status: string;
+};
