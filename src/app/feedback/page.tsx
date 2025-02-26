@@ -1,4 +1,4 @@
-import ReportForm from "@/components/forms/report-form";
+import ReportForm from "@/app/feedback/_components/report-form";
 
 export default function AdminPage() {
   return (

@@ -1,28 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { ToiletInfo } from "@/lib/definitions";
+import { useEffect, useRef, useState } from "react";
+import { updateDatabase, uploadFiles } from "./_hooks";
 
 export default function ReportForm() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileList | null>(null);
+  const [toiletsInfo, setToiletsInfo] = useState<ToiletInfo[]>([]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Form data
-    const formData = new FormData();
-    formData.append("location", location);
-    formData.append("description", description);
-    formData.append("remarks", remarks);
-    if (files) {
-      Array.from(files).forEach((file) => formData.append("files", file));
-    }
+    const dbFormData = new FormData();
+    dbFormData.append("location", location);
+    dbFormData.append("description", description);
+    dbFormData.append("remarks", remarks);
 
-    // Example: send form data to an API
-    console.log("Form submitted", { location, description, remarks, files });
+    if (files) {
+      const fileKeys = await uploadFiles(files);
+      console.log(fileKeys);
+      dbFormData.append("photos", JSON.stringify(fileKeys));
+      console.log(dbFormData);
+      const response = await updateDatabase(dbFormData);
+      if (response) {
+        alert("Report submitted successfully!");
+        setLocation("");
+        setDescription("");
+        setRemarks("");
+        setFiles(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // Reset file input
+        }
+      }
+    }
   };
+
+  useEffect(() => {
+    const fetchToilets = async () => {
+      try {
+        const res = await fetch("/api/toilet");
+        const data = await res.json();
+        setToiletsInfo(data);
+      } catch (error) {
+        console.error("Failed to fetch toilets", error);
+      }
+    };
+
+    fetchToilets();
+  }, []);
 
   return (
     <div className="flex items-center justify-center bg-gray-100">
@@ -43,9 +73,11 @@ export default function ReportForm() {
           <option value="" disabled>
             Select location
           </option>
-          <option value="1st Floor">1st Floor</option>
-          <option value="2nd Floor">2nd Floor</option>
-          <option value="3rd Floor">3rd Floor</option>
+          {toiletsInfo.map((toilet) => (
+            <option key={toilet.id} value={toilet.id}>
+              {`${toilet.building}-${toilet.floor}-${toilet.type}`}
+            </option>
+          ))}
         </select>
 
         {/* Upload Photos/Files */}
@@ -53,6 +85,7 @@ export default function ReportForm() {
         <input
           type="file"
           multiple
+          ref={fileInputRef}
           onChange={(e) => setFiles(e.target.files)}
           className="mb-4 w-full rounded-md border p-2"
           accept="image/*"

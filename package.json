@@ -12,6 +12,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.750.0",
+    "@aws-sdk/s3-presigned-post": "^3.750.0",
     "@neondatabase/api-client": "^1.11.5",
     "@neondatabase/serverless": "^0.10.4",
     "@nextui-org/react": "^2.4.8",
@@ -26,7 +28,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "^1.5.0",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.8.6",

@@ -1,4 +1,4 @@
-import AddToiletForm from "@/components/forms/add-toilet-form";
+import AddToiletForm from "@/app/admin/add-toilet/_components/add-toilet-form";
 
 export default function AddToiletPage() {
   return (
