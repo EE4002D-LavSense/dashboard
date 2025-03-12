@@ -16,6 +16,7 @@ import {
 import { ToiletReportTable } from "@/lib/definitions";
 import { ChevronDown } from "lucide-react";
 import { getReportsAction } from "@/lib/actions";
+import { ReloadIcon } from "@/app/log/_components/log-table";
 
 const reports_columns = [
   { uid: "createdAt", name: "Date & Time" },
@@ -27,12 +28,16 @@ const reports_columns = [
 
 export default function ToiletFeedbackTable() {
   const [reportsData, setReportsData] = React.useState<ToiletReportTable[]>([]);
+  const [loading, setLoading] = React.useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const data = await getReportsAction();
+    setReportsData(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getReportsAction();
-      setReportsData(data);
-    };
     fetchData();
   }, []);
 
@@ -89,19 +94,34 @@ export default function ToiletFeedbackTable() {
   );
 
   return (
-    <Table aria-label="Toilet Reports Table">
-      <TableHeader columns={reports_columns}>
-        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
-      </TableHeader>
-      <TableBody items={reportsData}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <div className="mb-4 mt-4 flex items-center justify-start">
+        <Button
+          isIconOnly
+          onClick={fetchData}
+          isLoading={loading}
+          color="default"
+          variant="bordered"
+        >
+          <ReloadIcon />
+        </Button>
+      </div>
+      <Table aria-label="Toilet Reports Table">
+        <TableHeader columns={reports_columns}>
+          {(column) => (
+            <TableColumn key={column.uid}>{column.name}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={reportsData}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   );
 }
