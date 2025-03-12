@@ -1,6 +1,7 @@
 "use client";
+
 import { ToiletInfo } from "@/lib/definitions";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { updateDatabase, uploadFiles } from "./_hooks";
 import { Camera } from "lucide-react";
 import { CameraCapture } from "./camera-capture";
