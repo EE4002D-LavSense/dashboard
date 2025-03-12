@@ -1,3 +1,5 @@
+"use client";
+
 export function FilePreview({ photos }: { photos: FileList | null }) {
   return (
     <>
