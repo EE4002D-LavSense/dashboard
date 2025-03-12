@@ -8,6 +8,7 @@ import { FilePreview } from "./file-preview";
 
 export default function ReportForm() {
   const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -17,6 +18,7 @@ export default function ReportForm() {
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
     // Form data
     const dbFormData = new FormData();
@@ -38,6 +40,20 @@ export default function ReportForm() {
         if (fileInputRef.current) {
           fileInputRef.current.value = ""; // Reset file input
         }
+        setLoading(false);
+      }
+    } else {
+      const response = await updateDatabase(dbFormData);
+      if (response) {
+        alert("Report submitted successfully!");
+        setLocation("");
+        setDescription("");
+        setRemarks("");
+        setFiles(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // Reset file input
+        }
+        setLoading(false);
       }
     }
   };
@@ -170,9 +186,10 @@ export default function ReportForm() {
         {/* Submit Button */}
         <button
           type="submit"
+          disabled={loading}
           className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700"
         >
-          Submit Report
+          {!loading ? "Submit Report" : "Loading ..."}
         </button>
       </form>
     </div>
