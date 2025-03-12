@@ -6,16 +6,31 @@ import { Camera } from "lucide-react";
 import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
 
-export default function ReportForm() {
+export default function ReportForm({
+  toiletData,
+}: {
+  toiletData: ToiletInfo[];
+}) {
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileList | null>(null);
-  const [toiletsInfo, setToiletsInfo] = useState<ToiletInfo[]>([]);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
+
+  const resetInputs = () => {
+    alert("Report submitted successfully!");
+    setLocation("");
+    setDescription("");
+    setRemarks("");
+    setFiles(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset file input
+    }
+    setLoading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
@@ -32,28 +47,12 @@ export default function ReportForm() {
       console.log(dbFormData);
       const response = await updateDatabase(dbFormData);
       if (response) {
-        alert("Report submitted successfully!");
-        setLocation("");
-        setDescription("");
-        setRemarks("");
-        setFiles(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // Reset file input
-        }
-        setLoading(false);
+        resetInputs();
       }
     } else {
       const response = await updateDatabase(dbFormData);
       if (response) {
-        alert("Report submitted successfully!");
-        setLocation("");
-        setDescription("");
-        setRemarks("");
-        setFiles(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // Reset file input
-        }
-        setLoading(false);
+        resetInputs();
       }
     }
   };
@@ -87,18 +86,6 @@ export default function ReportForm() {
   };
 
   useEffect(() => {
-    const fetchToilets = async () => {
-      try {
-        const res = await fetch("/api/toilet");
-        const data = await res.json();
-        setToiletsInfo(data);
-      } catch (error) {
-        console.error("Failed to fetch toilets", error);
-      }
-    };
-    fetchToilets();
-
-    // Cleanup on component unmount
     return () => {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
@@ -124,7 +111,7 @@ export default function ReportForm() {
           <option value="" disabled>
             Select location
           </option>
-          {toiletsInfo.map((toilet) => (
+          {toiletData.map((toilet) => (
             <option key={toilet.id} value={toilet.id}>
               {`${toilet.building}-${toilet.floor}-${toilet.type}`}
             </option>

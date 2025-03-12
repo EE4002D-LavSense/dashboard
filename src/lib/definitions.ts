@@ -9,7 +9,7 @@ export type ToiletDashboardData = {
 
 export type ToiletInfo = {
   id?: number;
-  location?: string;
+  location?: string | null;
   building: string;
   floor: string;
   type: string;
