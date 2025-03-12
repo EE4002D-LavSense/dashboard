@@ -58,7 +58,13 @@ export async function getAllLogs() {
 }
 
 export async function getToiletReports(): Promise<ToiletReportTable[]> {
-  const result = await db
+  const result = await fetchToiletReports();
+  return Promise.all(result.map(formatReportRow));
+}
+
+// Fetch reports from the database and sort by date (latest first)
+async function fetchToiletReports() {
+  return db
     .select({
       id: reportsTable.id,
       location: reportsTable.location,
@@ -77,33 +83,24 @@ export async function getToiletReports(): Promise<ToiletReportTable[]> {
       reportsTable.description,
       reportsTable.remarks,
       reportsTable.createdAt,
-    );
+    )
+    .orderBy(desc(reportsTable.createdAt)); // Sort by latest date
+}
 
-  // Process each report to get signed URLs for its files
-  const reportsWithSignedUrls = await Promise.all(
-    result.map(async (row) => {
-      let signedFileUrls: string[] = [];
+// Generate signed file URLs
+async function getSignedFileUrls(fileUrls: string[]): Promise<string[]> {
+  return fileUrls[0] !== null ? Promise.all(fileUrls.map(getS3FileUrl)) : [];
+}
 
-      // Check if we have files to process
-      if (row.fileUrls[0] !== null) {
-        // Generate signed URLs for each file path
-        signedFileUrls = await Promise.all(
-          row.fileUrls.map((filePath) => getS3FileUrl(filePath)),
-        );
-      }
-      const formatLocation = await getToiletName(row.location);
-
-      return {
-        ...row,
-        remarks: row.remarks === null ? undefined : row.remarks,
-        createdAt: row.createdAt.toLocaleString(),
-        fileUrls: signedFileUrls,
-        location: formatLocation,
-      };
-    }),
-  );
-
-  return reportsWithSignedUrls;
+// Format a report row
+async function formatReportRow(row: any) {
+  return {
+    ...row,
+    remarks: row.remarks ?? undefined,
+    createdAt: row.createdAt.toLocaleString(),
+    fileUrls: await getSignedFileUrls(row.fileUrls),
+    location: await getToiletName(row.location),
+  };
 }
 
 export async function getToiletName(toiletId: string) {
