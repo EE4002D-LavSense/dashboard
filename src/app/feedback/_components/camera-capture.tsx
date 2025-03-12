@@ -5,17 +5,17 @@ import { useEffect, useRef } from "react";
 interface CameraCaptureProps {
   isCameraOpen: boolean;
   closeCamera: () => void;
-  setFiles: React.Dispatch<React.SetStateAction<FileList | null>>;
+  setPhotos: React.Dispatch<React.SetStateAction<FileList | null>>;
   stream: MediaStream | null;
-  files: FileList | null;
+  photos: FileList | null;
 }
 
 export function CameraCapture({
   isCameraOpen,
   closeCamera,
-  setFiles,
+  setPhotos,
   stream,
-  files,
+  photos,
 }: CameraCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,9 +46,9 @@ export function CameraCapture({
               // Create a FileList-like object
               const dataTransfer = new DataTransfer();
 
-              // Add existing files if any
-              if (files) {
-                Array.from(files).forEach((existingFile) => {
+              // Add existing photos if any
+              if (photos) {
+                Array.from(photos).forEach((existingFile) => {
                   dataTransfer.items.add(existingFile);
                 });
               }
@@ -56,8 +56,8 @@ export function CameraCapture({
               // Add the new file
               dataTransfer.items.add(file);
 
-              // Update files state
-              setFiles(dataTransfer.files);
+              // Update photos state
+              setPhotos(dataTransfer.files);
 
               // Close camera
               closeCamera();

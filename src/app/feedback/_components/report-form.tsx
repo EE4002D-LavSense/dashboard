@@ -5,6 +5,7 @@ import { updateDatabase, uploadFiles } from "./_hooks";
 import { Camera } from "lucide-react";
 import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
+import { AudioCapture } from "./audio-capture";
 
 export default function ReportForm({
   toiletData,
@@ -16,18 +17,24 @@ export default function ReportForm({
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<FileList | null>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
+  const [photos, setPhotos] = useState<FileList | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
 
   const resetInputs = () => {
     alert("Report submitted successfully!");
     setLocation("");
     setDescription("");
     setRemarks("");
-    setFiles(null);
+    setPhotos(null);
+    setAudioFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
+    }
+    if (audioInputRef.current) {
+      audioInputRef.current.value = ""; // Reset audio input
     }
     setLoading(false);
   };
@@ -40,11 +47,11 @@ export default function ReportForm({
     dbFormData.append("location", location);
     dbFormData.append("description", description);
     dbFormData.append("remarks", remarks);
-    if (files) {
-      const fileKeys = await uploadFiles(files);
+    if (photos) {
+      const fileKeys = await uploadFiles(photos);
       console.log(fileKeys);
       dbFormData.append("photos", JSON.stringify(fileKeys));
-      console.log(dbFormData);
+
       const response = await updateDatabase(dbFormData);
       if (response) {
         resetInputs();
@@ -125,7 +132,7 @@ export default function ReportForm({
             type="file"
             multiple
             ref={fileInputRef}
-            onChange={(e) => setFiles(e.target.files)}
+            onChange={(e) => setPhotos(e.target.files)}
             className="w-full rounded-md border p-2"
             accept="image/*"
           />
@@ -143,13 +150,15 @@ export default function ReportForm({
         <CameraCapture
           isCameraOpen={isCameraOpen}
           closeCamera={closeCamera}
-          setFiles={setFiles}
+          setPhotos={setPhotos}
           stream={stream}
-          files={files}
+          photos={photos}
         />
 
+        {/* Record Audio Section */}
+        <AudioCapture audioFile={audioFile} setAudioFile={setAudioFile} />
         {/* Show preview of selected files */}
-        <FilePreview files={files} />
+        <FilePreview photos={photos} />
 
         {/* Problem Description */}
         <label className="mb-2 block font-medium">Description</label>
@@ -174,7 +183,7 @@ export default function ReportForm({
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700"
+          className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700 disabled:bg-blue-300"
         >
           {!loading ? "Submit Report" : "Loading ..."}
         </button>
