@@ -30,3 +30,12 @@ export type LogData = {
   data: string;
   status: string;
 };
+
+export type ToiletReportTable = {
+  id: number;
+  location: string;
+  description: string;
+  remarks?: string;
+  createdAt: string;
+  fileUrls?: string[];
+};
