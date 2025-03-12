@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import { ToiletReportTable } from "@/lib/definitions";
 import { ChevronDown } from "lucide-react";
+import { getReportsAction } from "@/lib/actions";
 
 const reports_columns = [
   { uid: "createdAt", name: "Date & Time" },
@@ -24,11 +25,17 @@ const reports_columns = [
   { uid: "fileUrls", name: "Files" },
 ];
 
-export default function ToiletFeedbackTable({
-  reportsData,
-}: {
-  reportsData: ToiletReportTable[];
-}) {
+export default function ToiletFeedbackTable() {
+  const [reportsData, setReportsData] = React.useState<ToiletReportTable[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getReportsAction();
+      setReportsData(data);
+    };
+    fetchData();
+  }, []);
+
   const renderCell = React.useCallback(
     (report: ToiletReportTable, columnKey: React.Key) => {
       const cellValue = report[columnKey as keyof ToiletReportTable];

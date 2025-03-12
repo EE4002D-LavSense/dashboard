@@ -1,17 +1,15 @@
 "use client";
 import { ToiletInfo } from "@/lib/definitions";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { updateDatabase, uploadFiles } from "./_hooks";
 import { Camera } from "lucide-react";
 import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
 import { AudioCapture } from "./audio-capture";
+import { fetchAllToilets } from "@/lib/actions";
 
-export default function ReportForm({
-  toiletData,
-}: {
-  toiletData: ToiletInfo[];
-}) {
+export default function ReportForm() {
+  const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -91,6 +89,15 @@ export default function ReportForm({
     }
     setIsCameraOpen(false);
   };
+
+  useEffect(() => {
+    const fetchToiletData = async () => {
+      const data = await fetchAllToilets();
+      setToiletData(data);
+    };
+
+    fetchToiletData();
+  }, []);
 
   useEffect(() => {
     return () => {
