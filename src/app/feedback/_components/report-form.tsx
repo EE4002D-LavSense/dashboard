@@ -38,6 +38,21 @@ export default function ReportForm() {
     setLoading(false);
   };
 
+  const transcribe = async () => {
+    try {
+      const audioFormData = new FormData();
+      audioFormData.append("audio", audioFile as File);
+      const response = await fetch("/api/transcribe", {
+        method: "POST",
+        body: audioFormData,
+      });
+      const transcript = await response.json();
+      setDescription(transcript.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
@@ -99,6 +114,13 @@ export default function ReportForm() {
 
     fetchToiletData();
   }, []);
+
+  // Process audio file
+  useEffect(() => {
+    if (!audioFile) return;
+    setDescription("Transcribing audio ...");
+    transcribe();
+  }, [audioFile]);
 
   useEffect(() => {
     return () => {
