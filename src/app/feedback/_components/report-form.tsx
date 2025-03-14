@@ -164,9 +164,9 @@ export default function ReportForm() {
         />
 
         {/* Record Audio Section */}
-        <AudioCapture audioFile={audioFile} setAudioFile={setAudioFile} />
+        <AudioCapture setAudioFile={setAudioFile} />
         {/* Show preview of selected files */}
-        <FilePreview photos={photos} />
+        <FilePreview photos={photos} audioFile={audioFile} />
 
         {/* Problem Description */}
         <label className="mb-2 block font-medium">Description</label>

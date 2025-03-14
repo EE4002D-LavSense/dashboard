@@ -1,6 +1,12 @@
 "use client";
 
-export function FilePreview({ photos }: { photos: FileList | null }) {
+export function FilePreview({
+  photos,
+  audioFile,
+}: {
+  photos: FileList | null;
+  audioFile: File | null;
+}) {
   return (
     <>
       {photos && photos.length > 0 && (
@@ -22,6 +28,15 @@ export function FilePreview({ photos }: { photos: FileList | null }) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+      {audioFile && (
+        <div className="mb-4">
+          <p className="mb-2 text-sm font-medium">1 audio file selected</p>
+          <audio controls playsInline>
+            <source src={URL.createObjectURL(audioFile)} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
         </div>
       )}
     </>

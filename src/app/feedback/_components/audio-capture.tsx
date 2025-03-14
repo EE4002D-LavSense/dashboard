@@ -1,13 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Mic, Square, Disc } from "lucide-react";
+import { Mic, Square } from "lucide-react";
 
 export function AudioCapture({
-  audioFile,
   setAudioFile,
 }: {
-  audioFile: File | null;
   setAudioFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) {
   const [isRecording, setIsRecording] = useState(false);
@@ -108,17 +106,6 @@ export function AudioCapture({
           )}
         </div>
       </div>
-
-      {audioFile && (
-        <div className="ml-2 flex items-center gap-2 text-sm">
-          <Disc size={16} className="text-green-500" />
-          <span>Audio recorded</span>
-          <audio controls className="h-8">
-            <source src={URL.createObjectURL(audioFile)} type="audio/webm" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      )}
     </>
   );
 }
