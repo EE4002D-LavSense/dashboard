@@ -20,15 +20,30 @@ export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // Function to close the mobile menu
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" isBordered>
+    <Navbar
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+      maxWidth="full"
+      isBordered
+    >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link href="/" className="text-3xl font-bold" color="foreground">
+          <Link
+            href="/"
+            className="text-3xl font-bold"
+            color="foreground"
+            onClick={closeMenu}
+          >
             LavSense
           </Link>
         </NavbarBrand>
@@ -56,13 +71,14 @@ export function AppNavBar() {
               href={navItem.href}
               color={navItem.href === pathname ? "primary" : "foreground"}
               className="w-full"
+              onClick={closeMenu}
             >
               {navItem.name}
             </Link>
           </NavbarMenuItem>
         ))}
         <NavbarItem>
-          <Button> Sign In </Button>
+          <Button onClick={closeMenu}> Sign In </Button>
         </NavbarItem>
       </NavbarMenu>
     </Navbar>
