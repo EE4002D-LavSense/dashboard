@@ -52,7 +52,7 @@ export const getFileUrls = async (file: File) => {
       method: "POST",
       body: JSON.stringify({
         contentType: file.type,
-        key: "photos/" + uuidv4(),
+        key: "files/" + uuidv4(),
       }),
       headers: {
         "Content-Type": "application/json",

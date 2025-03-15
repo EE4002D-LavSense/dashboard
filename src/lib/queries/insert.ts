@@ -17,7 +17,7 @@ export async function addFeedback(data: FormData) {
   const location = data.get("location") as string;
   const description = data.get("description") as string;
   const remarks = data.get("remarks") as string;
-  const photos = JSON.parse(data.get("photos") as string);
+  const files = JSON.parse(data.get("files") as string);
 
   await db.insert(reportsTable).values({
     location,
@@ -27,7 +27,7 @@ export async function addFeedback(data: FormData) {
 
   const reportId = await getReportId(location, description, remarks);
 
-  photos.forEach(async (filePath: string) => {
+  files.forEach(async (filePath: string) => {
     await db.insert(reportFilesTable).values({ reportId, filePath });
   });
 }

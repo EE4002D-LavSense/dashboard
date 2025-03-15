@@ -52,6 +52,11 @@ export default function ReportForm() {
       console.error(error);
     }
   };
+  const fileToFileList = (file: File): FileList => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
@@ -61,11 +66,17 @@ export default function ReportForm() {
     dbFormData.append("location", location);
     dbFormData.append("description", description);
     dbFormData.append("remarks", remarks);
-    if (photos) {
-      const fileKeys = await uploadFiles(photos);
-      console.log(fileKeys);
-      dbFormData.append("photos", JSON.stringify(fileKeys));
-
+    if (photos || audioFile) {
+      let allFiles: string[] = [];
+      if (photos) {
+        const fileKeys = await uploadFiles(photos);
+        allFiles.push(...fileKeys);
+      }
+      if (audioFile) {
+        const fileKey = await uploadFiles(fileToFileList(audioFile));
+        allFiles.push(...fileKey);
+      }
+      dbFormData.append("files", JSON.stringify(allFiles));
       const response = await updateDatabase(dbFormData);
       if (response) {
         resetInputs();
