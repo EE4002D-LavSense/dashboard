@@ -67,19 +67,35 @@ export default function ReportForm() {
     dbFormData.append("description", description);
     dbFormData.append("remarks", remarks);
     if (photos || audioFile) {
-      let allFiles: string[] = [];
-      if (photos) {
-        const fileKeys = await uploadFiles(photos);
-        allFiles.push(...fileKeys);
-      }
-      if (audioFile) {
-        const fileKey = await uploadFiles(fileToFileList(audioFile));
-        allFiles.push(...fileKey);
-      }
-      dbFormData.append("files", JSON.stringify(allFiles));
-      const response = await updateDatabase(dbFormData);
-      if (response) {
-        resetInputs();
+      try {
+        const uploadPromises = [];
+
+        // Add photos upload promise if photos exist
+        if (photos && photos.length > 0) {
+          uploadPromises.push(uploadFiles(photos));
+        }
+
+        // Add audio upload promise if audio exists
+        if (audioFile) {
+          uploadPromises.push(uploadFiles(fileToFileList(audioFile)));
+        }
+
+        // Wait for all uploads to complete concurrently
+        const uploadResults = await Promise.all(uploadPromises);
+
+        // Flatten array of file keys
+        const allFiles = uploadResults.flat();
+        console.log(allFiles);
+
+        // Proceed with database update
+        dbFormData.append("files", JSON.stringify(allFiles));
+        const response = await updateDatabase(dbFormData);
+        if (response) {
+          resetInputs();
+        }
+      } catch (error) {
+        console.error("Error during file upload:", error);
+        // Handle the error appropriately
       }
     } else {
       const response = await updateDatabase(dbFormData);
