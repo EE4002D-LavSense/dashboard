@@ -1,11 +1,5 @@
 "use client";
-import {
-  GoogleMap,
-  Marker,
-  InfoWindow,
-  Circle,
-  LoadScript,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindow, Circle } from "@react-google-maps/api";
 import {
   color,
   defaultMapCenter,
@@ -15,7 +9,6 @@ import {
   locationsData,
 } from "@/lib/map/constants";
 import { useState, useEffect, useRef } from "react";
-import Loader from "./loader";
 
 export default function MainMap() {
   const [activeMarker, setActiveMarker] = useState("");
@@ -69,76 +62,73 @@ export default function MainMap() {
 
   return (
     <div className="w-full">
-      <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API!}
-        loadingElement={<Loader />}
+      <GoogleMap
+        mapContainerStyle={defaultMapContainerStyle}
+        center={mapCenter}
+        zoom={defaultMapZoom}
+        options={defaultMapOptions}
+        onClick={handleMapClick}
       >
-        <GoogleMap
-          mapContainerStyle={defaultMapContainerStyle}
-          center={mapCenter}
-          zoom={defaultMapZoom}
-          options={defaultMapOptions}
-          onClick={handleMapClick}
-        >
-          {locationsData.map((location) => (
+        {locationsData.map((location) => (
+          <Marker
+            key={location.id}
+            position={location.position}
+            onClick={() => handleMarkerClick(location.id)}
+          />
+        ))}
+        {locationsData.map(
+          (location) =>
+            activeMarker === location.id && (
+              <InfoWindow
+                key={location.id}
+                position={location.position}
+                onCloseClick={() => setActiveMarker("")}
+              >
+                <div>
+                  <h3 className="mb-2 font-semibold">
+                    {location.name} Toilets
+                  </h3>
+                  <ul>
+                    {location.toilets.map((toilet, index) => (
+                      <li
+                        key={index}
+                      >{`${location.id}-${toilet.floor}-${toilet.type}`}</li>
+                    ))}
+                  </ul>
+                </div>
+              </InfoWindow>
+            ),
+        )}
+        {/* User location marker and accuracy circle */}
+        {userLocation && (
+          <>
             <Marker
-              key={location.id}
-              position={location.position}
-              onClick={() => handleMarkerClick(location.id)}
+              key={`user-marker-${userLocation.lat}-${userLocation.lng}`}
+              position={{ lat: userLocation.lat, lng: userLocation.lng }}
+              icon={{
+                fillColor: color["google-blue 100"],
+                fillOpacity: 1,
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                strokeColor: color["white 100"],
+                strokeWeight: 2,
+              }}
             />
-          ))}
-          {locationsData.map(
-            (location) =>
-              activeMarker === location.id && (
-                <InfoWindow
-                  key={location.id}
-                  position={location.position}
-                  onCloseClick={() => setActiveMarker("")}
-                >
-                  <div>
-                    <h3 className="mb-2 font-semibold">
-                      {location.name} Toilets
-                    </h3>
-                    <ul>
-                      {location.toilets.map((toilet, index) => (
-                        <li
-                          key={index}
-                        >{`${location.id}-${toilet.floor}-${toilet.type}`}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </InfoWindow>
-              ),
-          )}
-          {/* User location marker and accuracy circle */}
-          {userLocation && (
-            <>
-              <Marker
-                position={{ lat: userLocation.lat, lng: userLocation.lng }}
-                icon={{
-                  fillColor: color["google-blue 100"],
-                  fillOpacity: 1,
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 8,
-                  strokeColor: color["white 100"],
-                  strokeWeight: 2,
-                }}
-              />
-              <Circle
-                center={{ lat: userLocation.lat, lng: userLocation.lng }}
-                radius={userLocation.accuracy}
-                options={{
-                  strokeColor: "#4285F4",
-                  strokeOpacity: 0.3,
-                  strokeWeight: 1,
-                  fillColor: "#4285F4",
-                  fillOpacity: 0.1,
-                }}
-              />
-            </>
-          )}
-        </GoogleMap>
-      </LoadScript>
+            <Circle
+              key={`user-circle-${userLocation.lat}-${userLocation.lng}`}
+              center={{ lat: userLocation.lat, lng: userLocation.lng }}
+              radius={userLocation.accuracy}
+              options={{
+                fillColor: color["google-blue 100"],
+                fillOpacity: 0.1,
+                strokeColor: color["google-blue 100"],
+                strokeOpacity: 0.5,
+                strokeWeight: 1,
+              }}
+            />
+          </>
+        )}
+      </GoogleMap>
     </div>
   );
 }
