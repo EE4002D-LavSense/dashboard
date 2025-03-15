@@ -10,7 +10,7 @@ import {
   TableRow,
   TableCell,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ToiletReportTable } from "@/lib/definitions";
 import { REPORTS_COLUMNS, REPORT_ROW_PER_PAGE } from "@/lib/constants";
 import { fetchReports, fetchReportsCount } from "@/lib/actions";

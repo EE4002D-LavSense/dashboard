@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Textarea, Button, Spacer, Card } from "@nextui-org/react";
+import { Input, Textarea, Button, Spacer, Card } from "@heroui/react";
 import { useState } from "react";
 
 export default function ContactPage() {

@@ -1,5 +1,5 @@
 import { ReloadIcon } from "@/components/common/reload-icon";
-import { Button, Pagination, Select, SelectItem } from "@nextui-org/react";
+import { Button, Pagination, Select, SelectItem } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 // Define row options with key and label
@@ -102,11 +102,7 @@ export default function DashboardHeader({
           size="sm"
           items={allRowOptions}
         >
-          {(option) => (
-            <SelectItem key={option.key} value={option.key}>
-              {option.label}
-            </SelectItem>
-          )}
+          {(option) => <SelectItem key={option.key}>{option.label}</SelectItem>}
         </Select>
       </div>
     </div>

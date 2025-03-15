@@ -10,7 +10,7 @@ import {
   NavbarMenuItem,
   Button,
   NavbarMenuToggle,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React, { useState } from "react";
 
 import { navBarItems } from "@/lib/navigation/constants";

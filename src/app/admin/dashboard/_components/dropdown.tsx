@@ -4,7 +4,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 
 export const renderFileDropdown = (urls: string[]) => {

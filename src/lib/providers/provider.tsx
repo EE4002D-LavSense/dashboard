@@ -1,6 +1,6 @@
 "use client";
 
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -12,7 +12,7 @@ export function Providers(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NextUIProvider navigate={router.push}>{props.children}</NextUIProvider>
+      <HeroUIProvider navigate={router.push}>{props.children}</HeroUIProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

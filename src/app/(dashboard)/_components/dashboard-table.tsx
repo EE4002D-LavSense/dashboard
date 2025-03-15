@@ -10,7 +10,7 @@ import {
   TableCell,
   Chip,
   ChipProps,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { dashboard_columns } from "@/components/table/contants";
 import { mockData } from "@/components/table/mock-data";
 import { ToiletDashboardData } from "@/lib/definitions";

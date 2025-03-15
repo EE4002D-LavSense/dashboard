@@ -11,7 +11,7 @@ import {
   Chip,
   ChipProps,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { LogData } from "@/lib/definitions";
 import DashboardHeader from "@/components/common/dashboard-header";
 import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
