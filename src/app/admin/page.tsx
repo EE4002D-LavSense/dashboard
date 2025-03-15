@@ -10,6 +10,12 @@ export default function AdminPage() {
         Dashboard
       </Link>
       <Link
+        href="/admin/log"
+        className="m-4 rounded-md bg-blue-500 p-4 text-white"
+      >
+        API Log
+      </Link>
+      <Link
         href="/admin/add-toilet"
         className="m-4 rounded-md bg-blue-500 p-4 text-white"
       >

@@ -2,7 +2,12 @@
 
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { getToiletReports, getToiletReportsCount } from "@/lib/queries/select";
+import {
+  getApiLogs,
+  getApiLogsCount,
+  getToiletReports,
+  getToiletReportsCount,
+} from "@/lib/queries/select";
 import { getAllToilets } from "@/lib/queries/select";
 
 export async function getS3FileUrl(key: string) {
@@ -17,14 +22,25 @@ export async function getS3FileUrl(key: string) {
   );
 }
 
-export async function getReportsAction(page: number, rowPerPage: number) {
+export async function fetchReports(page: number, rowPerPage: number) {
   return await getToiletReports(page, rowPerPage);
 }
 
-export async function getReportsCountAction() {
+export async function fetchReportsCount() {
   return (await getToiletReportsCount())[0].count;
 }
 
 export async function fetchAllToilets() {
   return await getAllToilets();
+}
+
+export async function fetchLogsCount() {
+  return (await getApiLogsCount())[0].count;
+}
+
+export async function fetchApiLogs(page: number, rowPerPage: number) {
+  return (await getApiLogs(page, rowPerPage)).map((log) => ({
+    ...log,
+    timestamp: new Date(log.timestamp).toLocaleString("en-GB"),
+  }));
 }

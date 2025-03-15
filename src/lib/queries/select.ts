@@ -50,11 +50,18 @@ export async function getReportId(
   return res[0].id;
 }
 
-export async function getAllLogs() {
+export async function getApiLogs(page: number, rowsPerPage: number) {
+  const offset = (page - 1) * rowsPerPage; // Calculate the starting row
   return await db
     .select()
     .from(apiLogsTable)
-    .orderBy(desc(apiLogsTable.timestamp));
+    .orderBy(desc(apiLogsTable.timestamp))
+    .limit(rowsPerPage)
+    .offset(offset);
+}
+
+export async function getApiLogsCount() {
+  return await db.select({ count: count() }).from(apiLogsTable);
 }
 
 export async function getToiletReportsCount() {

@@ -6,4 +6,6 @@ export const REPORTS_COLUMNS = [
   { uid: "fileUrls", name: "Files" },
 ];
 
-export const ROW_PER_PAGE = 8;
+export const REPORT_ROW_PER_PAGE = 8;
+
+export const LOG_ROW_PER_PAGE = 15;
