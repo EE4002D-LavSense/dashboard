@@ -6,7 +6,7 @@ import {
   reportsTable,
   toiletsTable,
 } from "@/lib/db/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, count } from "drizzle-orm";
 import { ToiletReportTable } from "@/lib/definitions";
 import { getS3FileUrl } from "../actions";
 
@@ -57,13 +57,22 @@ export async function getAllLogs() {
     .orderBy(desc(apiLogsTable.timestamp));
 }
 
-export async function getToiletReports(): Promise<ToiletReportTable[]> {
-  const result = await fetchToiletReports();
+export async function getToiletReportsCount() {
+  return await db.select({ count: count() }).from(reportsTable);
+}
+
+export async function getToiletReports(
+  page: number,
+  rowPerPage: number,
+): Promise<ToiletReportTable[]> {
+  const result = await fetchToiletReports(page, rowPerPage);
   return Promise.all(result.map(formatReportRow));
 }
 
 // Fetch reports from the database and sort by date (latest first)
-async function fetchToiletReports() {
+async function fetchToiletReports(page: number, rowsPerPage: number) {
+  const offset = (page - 1) * rowsPerPage; // Calculate the starting row
+
   return db
     .select({
       id: reportsTable.id,
@@ -84,7 +93,9 @@ async function fetchToiletReports() {
       reportsTable.remarks,
       reportsTable.createdAt,
     )
-    .orderBy(desc(reportsTable.createdAt)); // Sort by latest date
+    .orderBy(desc(reportsTable.createdAt)) // Sort by latest date
+    .limit(rowsPerPage)
+    .offset(offset);
 }
 
 // Generate signed file URLs

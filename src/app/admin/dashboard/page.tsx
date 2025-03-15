@@ -3,8 +3,8 @@ import ToiletFeedbackTable from "@/app/admin/dashboard/_components/toilet-feedba
 export default async function AdminDashboardPage() {
   return (
     <>
-      <h1 className="m-10 -mb-10 text-4xl font-bold">Feedback Dashboard</h1>
-      <div className="m-10 flex h-screen flex-col">
+      <h1 className="ml-10 mt-4 text-4xl font-bold">Feedback Dashboard</h1>
+      <div className="ml-10 mr-10 flex h-screen flex-col">
         <ToiletFeedbackTable />
       </div>
     </>

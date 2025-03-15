@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -7,15 +8,17 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Spinner,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
   Button,
+  Pagination,
 } from "@nextui-org/react";
 import { ToiletReportTable } from "@/lib/definitions";
 import { ChevronDown } from "lucide-react";
-import { getReportsAction } from "@/lib/actions";
+import { getReportsAction, getReportsCountAction } from "@/lib/actions";
 import { ReloadIcon } from "@/app/log/_components/log-table";
 
 const reports_columns = [
@@ -27,21 +30,41 @@ const reports_columns = [
 ];
 
 export default function ToiletFeedbackTable() {
-  const [reportsData, setReportsData] = React.useState<ToiletReportTable[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const ROW_PER_PAGE = 8;
+  const [reportsData, setReportsData] = useState<ToiletReportTable[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const initData = async () => {
+    setLoading(true);
+    const totalRows = await getReportsCountAction();
+    setTotalPage(Math.ceil(totalRows / ROW_PER_PAGE));
+    const data = await getReportsAction(page, ROW_PER_PAGE);
+    setReportsData(data);
+    setLoading(false);
+  };
 
   const fetchData = async () => {
     setLoading(true);
-    const data = await getReportsAction();
+    const data = await getReportsAction(page, ROW_PER_PAGE);
+    setReportsData(data);
+    setLoading(false);
+  };
+
+  const fetchNewPage = async (newPage: number) => {
+    setLoading(true);
+    setPage(newPage);
+    const data = await getReportsAction(newPage, ROW_PER_PAGE);
     setReportsData(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
+    initData();
   }, []);
 
-  const renderCell = React.useCallback(
+  const renderCell = useCallback(
     (report: ToiletReportTable, columnKey: React.Key) => {
       const cellValue = report[columnKey as keyof ToiletReportTable];
 
@@ -85,7 +108,7 @@ export default function ToiletFeedbackTable() {
       // Format date if it's the createdAt column
       if (columnKey === "createdAt" && cellValue) {
         const date = new Date(cellValue as string);
-        return date.toLocaleString();
+        return date.toLocaleString("en-GB");
       }
 
       return cellValue;
@@ -95,7 +118,7 @@ export default function ToiletFeedbackTable() {
 
   return (
     <>
-      <div className="mb-4 mt-4 flex items-center justify-start">
+      <div className="mb-4 mt-4 flex items-center justify-between">
         <Button
           isIconOnly
           onClick={fetchData}
@@ -105,6 +128,18 @@ export default function ToiletFeedbackTable() {
         >
           <ReloadIcon />
         </Button>
+
+        {totalPage > 0 ? (
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={totalPage}
+            onChange={(newPage) => fetchNewPage(newPage)}
+          />
+        ) : null}
       </div>
       <Table aria-label="Toilet Reports Table">
         <TableHeader columns={reports_columns}>
@@ -112,7 +147,11 @@ export default function ToiletFeedbackTable() {
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={reportsData}>
+        <TableBody
+          items={reportsData}
+          loadingContent={<Spinner />}
+          loadingState={loading ? "loading" : "idle"}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
