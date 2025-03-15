@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -17,6 +17,7 @@ import DashboardHeader from "@/components/common/dashboard-header";
 import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LOG_ROW_PER_PAGE } from "@/lib/constants";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Success: "success",
@@ -25,10 +26,25 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 };
 
 export default function LogTable() {
-  const [page, setPage] = useState(1);
-  const [rowPerPage, setRowPerPage] = useState(LOG_ROW_PER_PAGE);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get values from URL or fallback to default
+  const initialPage = Number(searchParams.get("page")) || 1;
+  const initialRows = Number(searchParams.get("rows")) || LOG_ROW_PER_PAGE;
+
+  const [page, setPage] = useState(initialPage);
+  const [rowPerPage, setRowPerPage] = useState(initialRows);
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    // Update URL when state changes
+    const params = new URLSearchParams();
+    params.set("page", String(page));
+    params.set("rows", String(rowPerPage));
+    router.replace(`?${params.toString()}`);
+  }, [page, rowPerPage, router]);
 
   const { isPending, data } = useQuery({
     queryKey: ["logs", page, rowPerPage],
