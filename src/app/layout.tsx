@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { Providers } from "@/lib/providers/nextui-provider";
-import { MapProvider } from "@/lib/providers/map-provider";
 
 import { AppShell } from "@/components/layouts/app-shell";
 import { AppNavBar } from "@/components/navigation/app-nav-bar";
@@ -27,12 +26,10 @@ export default function RootLayout({
     <html lang="en" className={cn(inter.variable, "light")}>
       <body>
         <Providers>
-          <MapProvider>
-            <AppShell>
-              <AppNavBar />
-              {children}
-            </AppShell>
-          </MapProvider>
+          <AppShell>
+            <AppNavBar />
+            {children}
+          </AppShell>
         </Providers>
         <Toaster richColors />
       </body>

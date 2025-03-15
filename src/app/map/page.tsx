@@ -1,4 +1,4 @@
-import MainMap from "@/components/map/main-map";
+import MainMap from "@/app/map/_components/main-map";
 
 export default function MapPage() {
   return (
