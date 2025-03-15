@@ -25,6 +25,10 @@ export function AppNavBar() {
     setIsMenuOpen(false);
   };
 
+  const isSamePath = (path: string) => {
+    return pathname.split("/")[1] === path.replace("/", "");
+  };
+
   return (
     <Navbar
       isMenuOpen={isMenuOpen}
@@ -51,10 +55,10 @@ export function AppNavBar() {
 
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         {navBarItems.map((navItem) => (
-          <NavbarItem key={navItem.href} isActive={navItem.href === pathname}>
+          <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
             <Link
               href={navItem.href}
-              color={navItem.href === pathname ? "primary" : "foreground"}
+              color={isSamePath(navItem.href) ? "primary" : "foreground"}
             >
               {navItem.name}
             </Link>
@@ -69,7 +73,7 @@ export function AppNavBar() {
           <NavbarMenuItem key={navItem.href}>
             <Link
               href={navItem.href}
-              color={navItem.href === pathname ? "primary" : "foreground"}
+              color={isSamePath(navItem.href) ? "primary" : "foreground"}
               className="w-full"
               onClick={closeMenu}
             >
