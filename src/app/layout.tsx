@@ -3,7 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
-import { Providers } from "@/lib/providers/nextui-provider";
+import { Providers } from "@/lib/providers/provider";
 
 import { AppShell } from "@/components/layouts/app-shell";
 import { AppNavBar } from "@/components/navigation/app-nav-bar";

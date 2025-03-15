@@ -21,6 +21,8 @@
     "@nextui-org/react": "^2.4.8",
     "@react-google-maps/api": "^2.20.3",
     "@tailwindcss/typography": "^0.5.15",
+    "@tanstack/react-query": "^5.68.0",
+    "@tanstack/react-query-devtools": "^5.68.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.4",

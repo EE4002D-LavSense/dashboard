@@ -15,33 +15,34 @@ import { REPORTS_COLUMNS, ROW_PER_PAGE } from "@/lib/constants";
 import { getReportsAction, getReportsCountAction } from "@/lib/actions";
 import { renderFileDropdown } from "./dropdown";
 import DashboardHeader from "@/components/common/dashboard-header";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function ToiletFeedbackTable() {
-  const [reportsData, setReportsData] = useState<ToiletReportTable[]>([]);
-  const [loading, setLoading] = useState(false);
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(1);
 
-  const initData = async (page: number = 1) => {
-    setLoading(true);
+  const queryClient = useQueryClient();
+
+  const { isPending, data } = useQuery({
+    queryKey: ["reports", page],
+    queryFn: () => getReportsAction(page, ROW_PER_PAGE),
+    staleTime: Infinity,
+  });
+
+  const initData = async () => {
     const totalRows = await getReportsCountAction();
     setTotalPage(Math.ceil(totalRows / ROW_PER_PAGE));
-    const data = await getReportsAction(page, ROW_PER_PAGE);
-    setReportsData(data);
-    setLoading(false);
+    queryClient.invalidateQueries({ queryKey: ["reports"] });
   };
 
   useEffect(() => {
     initData();
   }, []);
 
-  const handleReload = () => initData(page);
+  const handleReload = () => initData();
 
   const handlePageChange = async (newPage: number) => {
-    setLoading(true);
-    setReportsData(await getReportsAction(newPage, ROW_PER_PAGE));
     setPage(newPage);
-    setLoading(false);
   };
 
   const formatDate = (dateString: string) => {
@@ -65,7 +66,7 @@ export default function ToiletFeedbackTable() {
     <>
       <DashboardHeader
         handleReload={handleReload}
-        loading={loading}
+        loading={isPending}
         totalPage={totalPage}
         page={page}
         handlePageChange={handlePageChange}
@@ -77,9 +78,9 @@ export default function ToiletFeedbackTable() {
           )}
         </TableHeader>
         <TableBody
-          items={reportsData}
+          items={data || []}
           loadingContent={<Spinner />}
-          loadingState={loading ? "loading" : "idle"}
+          loadingState={isPending ? "loading" : "idle"}
         >
           {(item) => (
             <TableRow key={item.id}>
