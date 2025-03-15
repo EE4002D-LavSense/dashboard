@@ -8,6 +8,8 @@ import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
 import { AudioCapture } from "./audio-capture";
 import { fetchAllToilets } from "@/lib/actions";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { addToast } from "@heroui/react";
 
 export default function ReportForm() {
   const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
@@ -22,8 +24,31 @@ export default function ReportForm() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (dataForm: FormData) => {
+      return updateDatabase(dataForm);
+    },
+    onSuccess: () => {
+      resetInputs();
+      addToast({
+        title: "Success",
+        description: "Report submitted successfully!",
+        color: "success",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["reports"],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["totalPage"],
+        refetchType: "all",
+      });
+    },
+  });
+
   const resetInputs = () => {
-    alert("Report submitted successfully!");
     setLocation("");
     setDescription("");
     setRemarks("");
@@ -89,19 +114,13 @@ export default function ReportForm() {
 
         // Proceed with database update
         dbFormData.append("files", JSON.stringify(allFiles));
-        const response = await updateDatabase(dbFormData);
-        if (response) {
-          resetInputs();
-        }
+        mutation.mutate(dbFormData);
       } catch (error) {
         console.error("Error during file upload:", error);
         // Handle the error appropriately
       }
     } else {
-      const response = await updateDatabase(dbFormData);
-      if (response) {
-        resetInputs();
-      }
+      mutation.mutate(dbFormData);
     }
   };
 
