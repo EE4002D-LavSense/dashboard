@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Table,
   TableHeader,
@@ -18,10 +19,25 @@ import DashboardHeader from "@/components/common/dashboard-header";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function ToiletFeedbackTable() {
-  const [page, setPage] = useState(1);
-  const [rowPerPage, setRowPerPage] = useState(REPORT_ROW_PER_PAGE);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get values from URL or fallback to default
+  const initialPage = Number(searchParams.get("page")) || 1;
+  const initialRows = Number(searchParams.get("rows")) || REPORT_ROW_PER_PAGE;
+
+  const [page, setPage] = useState(initialPage);
+  const [rowPerPage, setRowPerPage] = useState(initialRows);
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    // Update URL when state changes
+    const params = new URLSearchParams();
+    params.set("page", String(page));
+    params.set("rows", String(rowPerPage));
+    router.replace(`?${params.toString()}`);
+  }, [page, rowPerPage, router]);
 
   const { isPending, data } = useQuery({
     queryKey: ["reports", page, rowPerPage],
@@ -51,7 +67,7 @@ export default function ToiletFeedbackTable() {
     totalPageQuery.refetch();
   };
 
-  const handlePageChange = async (newPage: number) => {
+  const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
