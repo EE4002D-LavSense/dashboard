@@ -275,7 +275,7 @@ export default function ReportForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full"
+              className="mt-2 w-full"
               color="primary"
               size="lg"
             >

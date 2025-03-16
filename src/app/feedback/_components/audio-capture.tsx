@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@heroui/react";
 import { Mic, Square } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -83,26 +84,26 @@ export function AudioCapture({
   return (
     <>
       <label className="mb-2 block font-medium">Record Audio Description</label>
-      <div className="mb-4">
+      <div className="mb-4 w-full">
         <div className="flex items-center gap-2">
           {!isRecording ? (
-            <button
+            <Button
               type="button"
-              onClick={startRecording}
-              className="flex items-center gap-2 rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600"
+              onPress={startRecording}
+              className="flex w-full items-center gap-2 rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600"
             >
               <Mic size={18} />
               Record Audio
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
               type="button"
-              onClick={stopRecording}
-              className="flex items-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-white hover:bg-gray-800"
+              onPress={stopRecording}
+              className="flex w-full items-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-white hover:bg-gray-800"
             >
               <Square size={18} />
               Stop Recording ({formatTime(recordingTime)})
-            </button>
+            </Button>
           )}
         </div>
       </div>

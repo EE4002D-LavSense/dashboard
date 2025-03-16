@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Form,
+  Input,
+  Select,
+  SelectItem,
+} from "@heroui/react";
 import { useState } from "react";
 
 export default function AddToiletForm() {
@@ -46,60 +56,61 @@ export default function AddToiletForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-lg"
-    >
-      <h2 className="mb-4 text-2xl font-bold">Add New Toilet</h2>
+    <Card className="w-full max-w-sm rounded-lg p-6">
+      <CardHeader title="Add New Toilet">
+        <h2 className="text-xl font-bold">Add New Toilet</h2>
+      </CardHeader>
+      <CardBody>
+        <Form onSubmit={handleSubmit}>
+          {/* Building */}
+          <div className="mb-4 w-full">
+            <label className="mb-2 block">Building</label>
+            <Input
+              type="text"
+              value={building}
+              onChange={(e) => setBuilding(e.target.value)}
+              required
+            />
+          </div>
 
-      {/* Building */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Building</label>
-        <input
-          type="text"
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
-          required
-          className="w-full rounded border border-gray-300 p-2"
-        />
-      </div>
+          {/* Floor */}
+          <div className="mb-4 w-full">
+            <label className="mb-2 block">Floor</label>
+            <Input
+              type="text"
+              value={floor}
+              onChange={(e) => setFloor(e.target.value)}
+              required
+            />
+          </div>
 
-      {/* Floor */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Floor</label>
-        <input
-          type="text"
-          value={floor}
-          onChange={(e) => setFloor(e.target.value)}
-          required
-          className="w-full rounded border border-gray-300 p-2"
-        />
-      </div>
+          {/* Type */}
+          <div className="mb-4 w-full">
+            <label className="mb-2 block">Type</label>
+            <Select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              placeholder="Select type"
+              required
+            >
+              <SelectItem key="MALE">Male</SelectItem>
+              <SelectItem key="FEMALE">Female</SelectItem>
+              <SelectItem key="OTHER">Other</SelectItem>
+            </Select>
+          </div>
 
-      {/* Type */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Type</label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          required
-          className="w-full rounded border border-gray-300 p-2"
-        >
-          <option value="">Select Type</option>
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-          <option value="OTHER">Other</option>
-        </select>
-      </div>
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded bg-blue-600 p-2 text-white transition hover:bg-blue-700"
-      >
-        {loading ? "Submitting..." : "Add Toilet"}
-      </button>
-    </form>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full"
+            color="primary"
+            size="lg"
+          >
+            {loading ? "Submitting..." : "Add Toilet"}
+          </Button>
+        </Form>
+      </CardBody>
+    </Card>
   );
 }
