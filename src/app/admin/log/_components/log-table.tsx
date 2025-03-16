@@ -64,14 +64,12 @@ export default function LogTable() {
 
   const handleReload = () => {
     queryClient.invalidateQueries({ queryKey: ["logs"] });
-    totalPageQuery.refetch();
   };
 
   const handleReset = () => {
     setPage(1);
     queryClient.invalidateQueries({ queryKey: ["logs"] });
     queryClient.invalidateQueries({ queryKey: ["totalPage"] });
-    totalPageQuery.refetch();
   };
 
   const handlePageChange = async (newPage: number) => {

@@ -41,11 +41,9 @@ export default function ReportForm() {
       });
       queryClient.invalidateQueries({
         queryKey: ["reports"],
-        refetchType: "all",
       });
       queryClient.invalidateQueries({
         queryKey: ["totalPage"],
-        refetchType: "all",
       });
     },
   });

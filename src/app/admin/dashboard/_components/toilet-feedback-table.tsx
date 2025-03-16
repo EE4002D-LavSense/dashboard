@@ -57,14 +57,12 @@ export default function ToiletFeedbackTable() {
 
   const handleReload = () => {
     queryClient.invalidateQueries({ queryKey: ["reports"] });
-    totalPageQuery.refetch();
   };
 
   const handleReset = () => {
     setPage(1);
     queryClient.invalidateQueries({ queryKey: ["reports"] });
     queryClient.invalidateQueries({ queryKey: ["totalPage"] });
-    totalPageQuery.refetch();
   };
 
   const handlePageChange = (newPage: number) => {
