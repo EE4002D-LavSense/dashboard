@@ -1,8 +1,10 @@
 "use client";
 import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { useState, useEffect, useRef } from "react";
+import { useTheme } from "next-themes";
 
 import {
+  defaultDarkMapOptions,
   defaultMapCenter,
   defaultMapContainerStyle,
   defaultMapOptions,
@@ -20,6 +22,9 @@ export default function MainMap() {
   } | null>(null);
   const [mapCenter, setMapCenter] = useState(defaultMapCenter);
   const centerSetRef = useRef(false);
+  const { theme, systemTheme } = useTheme();
+  const isDarkMode =
+    theme === "dark" || (theme === "system" && systemTheme === "dark");
 
   const handleMarkerClick = (markerId: string) => {
     setActiveMarker(markerId);
@@ -67,7 +72,7 @@ export default function MainMap() {
         mapContainerStyle={defaultMapContainerStyle}
         center={mapCenter}
         zoom={defaultMapZoom}
-        options={defaultMapOptions}
+        options={isDarkMode ? defaultDarkMapOptions : defaultMapOptions}
         onClick={handleMapClick}
       >
         {locationsData.map((location) => (
