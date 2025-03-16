@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 export function Providers(props: { children: React.ReactNode }) {
   const router = useRouter();
@@ -24,8 +25,10 @@ export function Providers(props: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <HeroUIProvider navigate={router.push}>
-        <ToastProvider />
-        {props.children}
+        <NextThemesProvider attribute="class" defaultTheme="system">
+          <ToastProvider />
+          {props.children}
+        </NextThemesProvider>
       </HeroUIProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -22,7 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(inter.variable, "light")}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(inter.variable, "light")}
+    >
       <body>
         <Providers>
           <AppShell>

@@ -29,8 +29,8 @@ const smellColorMap: Record<string, ChipProps["color"]> = {
 };
 
 const genderColorMap: Record<string, string> = {
-  MALE: "bg-blue-200",
-  FEMALE: "bg-pink-200",
+  MALE: "bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-300",
+  FEMALE: "bg-pink-200 text-pink-800 dark:bg-pink-700 dark:text-pink-300",
 };
 
 const toilets = mockData;
@@ -95,7 +95,7 @@ export default function DashboardTable() {
   );
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table aria-label="Main Dashboard Table">
       <TableHeader columns={dashboard_columns}>
         {(column) => (
           <TableColumn

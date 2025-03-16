@@ -1,6 +1,17 @@
 "use client";
 
-import { addToast } from "@heroui/react";
+import {
+  addToast,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Form,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@heroui/react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Camera } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -178,93 +189,101 @@ export default function ReportForm() {
   }, [stream]);
 
   return (
-    <div className="flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-md"
-      >
-        <h2 className="mb-4 text-xl font-semibold">Report a Toilet Issue</h2>
-        {/* Toilet Location */}
-        <label className="mb-2 block font-medium">Toilet Location</label>
-        <select
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="mb-4 w-full rounded-md border p-2"
-          required
-        >
-          <option value="" disabled>
-            Select location
-          </option>
-          {toiletData.map((toilet) => (
-            <option key={toilet.id} value={toilet.id}>
-              {`${toilet.building}-${toilet.floor}-${toilet.type}`}
-            </option>
-          ))}
-        </select>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-md rounded-lg p-6">
+        <CardHeader title="Report a Toilet Issue">
+          <h2 className="text-xl font-semibold">Report a Toilet Issue</h2>
+        </CardHeader>
+        <CardBody>
+          <Form onSubmit={handleSubmit}>
+            {/* Toilet Location */}
+            <label className="mb-2 block font-medium">Toilet Location</label>
+            <Select
+              label="Select location"
+              selectedKeys={location ? new Set([location]) : new Set()}
+              onSelectionChange={(keys) => {
+                const selectedKey = Array.from(keys)[0]; // Extract first key
+                if (typeof selectedKey === "string") {
+                  setLocation(selectedKey); // Ensure it's a string before updating state
+                }
+              }}
+              className="w-full"
+              isRequired
+            >
+              {toiletData.map((toilet) => (
+                <SelectItem key={toilet.id}>
+                  {`${toilet.building}-${toilet.floor}-${toilet.type}`}
+                </SelectItem>
+              ))}
+            </Select>
 
-        {/* Upload Photos/Files */}
-        <label className="mb-2 block font-medium">Upload Photos</label>
-        <div className="mb-4 flex gap-2">
-          <input
-            type="file"
-            multiple
-            ref={fileInputRef}
-            onChange={(e) => setPhotos(e.target.files)}
-            className="w-full rounded-md border p-2"
-            accept="image/*"
-          />
-          <button
-            type="button"
-            onClick={openCamera}
-            className="flex items-center justify-center rounded-md bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
-            title="Take a photo"
-          >
-            <Camera size={20} />
-          </button>
-        </div>
+            {/* Upload Photos/Files */}
+            <label className="mb-2 block font-medium">Upload Photos</label>
+            <div className="mb-4 flex gap-2">
+              <Input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={(e) => setPhotos(e.target.files)}
+                className="w-full rounded-md"
+                accept="image/*"
+              />
+              <Button
+                type="button"
+                onPress={openCamera}
+                className="flex items-center justify-center bg-blue-500 px-3 py-3 text-white hover:bg-blue-600"
+                title="Take a photo"
+              >
+                <Camera size={20} />
+              </Button>
+            </div>
 
-        {/* Camera UI */}
-        <CameraCapture
-          isCameraOpen={isCameraOpen}
-          closeCamera={closeCamera}
-          setPhotos={setPhotos}
-          stream={stream}
-          photos={photos}
-        />
+            {/* Camera UI */}
+            <CameraCapture
+              isCameraOpen={isCameraOpen}
+              closeCamera={closeCamera}
+              setPhotos={setPhotos}
+              stream={stream}
+              photos={photos}
+            />
 
-        {/* Record Audio Section */}
-        <AudioCapture setAudioFile={setAudioFile} />
-        {/* Show preview of selected files */}
-        <FilePreview photos={photos} audioFile={audioFile} />
+            {/* Record Audio Section */}
+            <AudioCapture setAudioFile={setAudioFile} />
+            {/* Show preview of selected files */}
+            <FilePreview photos={photos} audioFile={audioFile} />
 
-        {/* Problem Description */}
-        <label className="mb-2 block font-medium">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="mb-4 h-24 w-full rounded-md border p-2"
-          placeholder="Describe the issue..."
-          required
-        />
+            {/* Problem Description */}
+            <label className="block font-medium">Description</label>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-md"
+              placeholder="Describe the issue..."
+              required
+            />
 
-        {/* Remarks */}
-        <label className="mb-2 block font-medium">Remarks</label>
-        <textarea
-          value={remarks}
-          onChange={(e) => setRemarks(e.target.value)}
-          className="mb-4 h-20 w-full rounded-md border p-2"
-          placeholder="Any additional remarks..."
-        />
+            {/* Remarks */}
+            <label className="block font-medium">Remarks</label>
+            <Textarea
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              className="w-full rounded-md"
+              placeholder="Any additional remarks..."
+            />
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-blue-600 py-2 text-white transition hover:bg-blue-700 disabled:bg-blue-300"
-        >
-          {!loading ? "Submit Report" : "Loading ..."}
-        </button>
-      </form>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+              color="primary"
+              size="lg"
+            >
+              {!loading ? "Submit Report" : "Loading ..."}
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
     </div>
   );
 }

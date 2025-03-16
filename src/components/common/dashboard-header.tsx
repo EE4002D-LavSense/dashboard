@@ -72,7 +72,7 @@ export default function DashboardHeader({
       <div className="flex items-center">
         <Button
           isIconOnly
-          onClick={handleReload}
+          onPress={handleReload}
           isLoading={loading}
           color="default"
           variant="bordered"

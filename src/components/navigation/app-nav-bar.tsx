@@ -46,7 +46,7 @@ export function AppNavBar() {
             href="/"
             className="text-3xl font-bold"
             color="foreground"
-            onClick={closeMenu}
+            onPress={closeMenu}
           >
             LavSense
           </Link>
@@ -75,14 +75,14 @@ export function AppNavBar() {
               href={navItem.href}
               color={isSamePath(navItem.href) ? "primary" : "foreground"}
               className="w-full"
-              onClick={closeMenu}
+              onPress={closeMenu}
             >
               {navItem.name}
             </Link>
           </NavbarMenuItem>
         ))}
         <NavbarItem>
-          <Button onClick={closeMenu}> Sign In </Button>
+          <Button onPress={closeMenu}> Sign In </Button>
         </NavbarItem>
       </NavbarMenu>
     </Navbar>
