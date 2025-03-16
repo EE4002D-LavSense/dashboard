@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function FilePreview({
   photos,
   audioFile,
@@ -20,9 +22,11 @@ export function FilePreview({
                 key={index}
                 className="relative h-16 w-16 overflow-hidden rounded"
               >
-                <img
+                <Image
                   src={URL.createObjectURL(file)}
                   alt={`Preview ${index}`}
+                  width={64}
+                  height={64}
                   className="h-full w-full object-cover"
                 />
               </div>

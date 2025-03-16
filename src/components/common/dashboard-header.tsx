@@ -1,6 +1,7 @@
-import { ReloadIcon } from "@/components/common/reload-icon";
 import { Button, Pagination, Select, SelectItem } from "@heroui/react";
 import { useEffect, useState } from "react";
+
+import { ReloadIcon } from "@/components/common/reload-icon";
 
 // Define row options with key and label
 const rowOptions = [
@@ -59,7 +60,7 @@ export default function DashboardHeader({
         [currentOption, ...prev].sort((a, b) => Number(a.key) - Number(b.key)),
       );
     }
-  }, [rowPerPage]);
+  }, [rowPerPage, allRowOptions]);
 
   const handleRowChange = (value: string) => {
     setRowPerPage(Number(value));

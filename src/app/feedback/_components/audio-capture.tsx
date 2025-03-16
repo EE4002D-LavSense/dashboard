@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { Mic, Square } from "lucide-react";
+import { useRef, useState } from "react";
 
 export function AudioCapture({
   setAudioFile,

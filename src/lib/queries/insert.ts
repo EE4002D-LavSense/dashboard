@@ -1,13 +1,13 @@
-import { db } from "@/lib/db";
+import { getReportId } from "./select";
 
+import { db } from "@/lib/db";
 import {
   apiLogsTable,
   reportFilesTable,
   reportsTable,
   toiletsTable,
 } from "@/lib/db/schema";
-import { ToiletInfo } from "@/lib/definitions";
-import { getReportId } from "./select";
+import { type ToiletInfo } from "@/lib/definitions";
 
 export async function addToilet(data: ToiletInfo) {
   await db.insert(toiletsTable).values(data);

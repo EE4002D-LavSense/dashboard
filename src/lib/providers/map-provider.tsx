@@ -2,8 +2,8 @@
 "use client";
 
 // Import necessary modules and functions from external libraries and our own project
-import { Libraries, useJsApiLoader } from "@react-google-maps/api";
-import { ReactNode } from "react";
+import { type Libraries, useJsApiLoader } from "@react-google-maps/api";
+import { type ReactNode } from "react";
 
 // Define a list of libraries to load from the Google Maps API
 const libraries = ["places", "drawing", "geometry"];

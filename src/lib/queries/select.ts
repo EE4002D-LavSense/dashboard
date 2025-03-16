@@ -1,14 +1,15 @@
-import { db } from "@/lib/db";
+import { eq, and, desc, sql, count } from "drizzle-orm";
 
+import { getS3FileUrl } from "../actions";
+
+import { db } from "@/lib/db";
 import {
   apiLogsTable,
   reportFilesTable,
   reportsTable,
   toiletsTable,
 } from "@/lib/db/schema";
-import { eq, and, desc, sql, count } from "drizzle-orm";
-import { ToiletReportTable } from "@/lib/definitions";
-import { getS3FileUrl } from "../actions";
+import { type ToiletReportTable } from "@/lib/definitions";
 
 export async function getToilet(building: string, floor: string, type: string) {
   if (!building || !floor || !type) {
@@ -111,7 +112,14 @@ async function getSignedFileUrls(fileUrls: string[]): Promise<string[]> {
 }
 
 // Format a report row
-async function formatReportRow(row: any) {
+async function formatReportRow(row: {
+  id: number;
+  description: string;
+  remarks: string | null;
+  createdAt: { toLocaleString: () => string };
+  fileUrls: string[];
+  location: string;
+}) {
   return {
     ...row,
     remarks: row.remarks ?? undefined,

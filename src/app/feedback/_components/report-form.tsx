@@ -1,15 +1,17 @@
 "use client";
 
-import { ToiletInfo } from "@/lib/definitions";
-import { useEffect, useRef, useState } from "react";
-import { updateDatabase, uploadFiles } from "./_hooks";
+import { addToast } from "@heroui/react";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Camera } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { updateDatabase, uploadFiles } from "./_hooks";
+import { AudioCapture } from "./audio-capture";
 import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
-import { AudioCapture } from "./audio-capture";
+
 import { fetchAllToilets } from "@/lib/actions";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { addToast } from "@heroui/react";
+import { type ToiletInfo } from "@/lib/definitions";
 
 export default function ReportForm() {
   const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
@@ -63,7 +65,7 @@ export default function ReportForm() {
     setLoading(false);
   };
 
-  const transcribe = async () => {
+  const transcribe = useCallback(async () => {
     try {
       const audioFormData = new FormData();
       audioFormData.append("audio", audioFile as File);
@@ -76,7 +78,8 @@ export default function ReportForm() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [audioFile]);
+
   const fileToFileList = (file: File): FileList => {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
@@ -166,7 +169,7 @@ export default function ReportForm() {
     if (!audioFile) return;
     setDescription("Transcribing audio ...");
     transcribe();
-  }, [audioFile]);
+  }, [audioFile, transcribe]);
 
   useEffect(() => {
     return () => {

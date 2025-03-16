@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
-import { Providers } from "@/lib/providers/provider";
+import "./globals.css";
 
 import { AppShell } from "@/components/layouts/app-shell";
 import { AppNavBar } from "@/components/navigation/app-nav-bar";
-
+import { Providers } from "@/lib/providers/provider";
 import { cn } from "@/lib/tailwind/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });

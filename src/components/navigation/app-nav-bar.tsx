@@ -11,10 +11,10 @@ import {
   Button,
   NavbarMenuToggle,
 } from "@heroui/react";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 import { navBarItems } from "@/lib/navigation/constants";
-import { usePathname } from "next/navigation";
 
 export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

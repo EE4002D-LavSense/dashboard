@@ -1,5 +1,6 @@
-import { addFeedback } from "@/lib/queries/insert";
 import { NextResponse } from "next/server";
+
+import { addFeedback } from "@/lib/queries/insert";
 
 export async function POST(req: Request) {
   // get the form data

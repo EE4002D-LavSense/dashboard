@@ -1,5 +1,7 @@
 "use client";
 import { GoogleMap, Marker, InfoWindow, Circle } from "@react-google-maps/api";
+import { useState, useEffect, useRef } from "react";
+
 import {
   color,
   defaultMapCenter,
@@ -8,7 +10,6 @@ import {
   defaultMapZoom,
   locationsData,
 } from "@/lib/map/constants";
-import { useState, useEffect, useRef } from "react";
 
 export default function MainMap() {
   const [activeMarker, setActiveMarker] = useState("");

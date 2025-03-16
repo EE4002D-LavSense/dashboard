@@ -1,7 +1,5 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import {
   Table,
   TableHeader,
@@ -11,12 +9,16 @@ import {
   TableCell,
   Spinner,
 } from "@heroui/react";
-import { ToiletReportTable } from "@/lib/definitions";
-import { REPORTS_COLUMNS, REPORT_ROW_PER_PAGE } from "@/lib/constants";
-import { fetchReports, fetchReportsCount } from "@/lib/actions";
-import { renderFileDropdown } from "./dropdown";
-import DashboardHeader from "@/components/common/dashboard-header";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useState, useEffect } from "react";
+
+import { renderFileDropdown } from "./dropdown";
+
+import DashboardHeader from "@/components/common/dashboard-header";
+import { fetchReports, fetchReportsCount } from "@/lib/actions";
+import { REPORTS_COLUMNS, REPORT_ROW_PER_PAGE } from "@/lib/constants";
+import { type ToiletReportTable } from "@/lib/definitions";
 
 export default function ToiletFeedbackTable() {
   const router = useRouter();
@@ -39,10 +41,9 @@ export default function ToiletFeedbackTable() {
     router.replace(`?${params.toString()}`);
   }, [page, rowPerPage, router]);
 
-  const { isPending, data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ["reports", page, rowPerPage],
     queryFn: () => fetchReports(page, rowPerPage),
-    staleTime: Infinity,
   });
 
   const getTotalPage = async () => {
@@ -52,7 +53,6 @@ export default function ToiletFeedbackTable() {
   const totalPageQuery = useQuery({
     queryKey: ["totalPage", rowPerPage],
     queryFn: getTotalPage,
-    staleTime: Infinity,
   });
 
   const handleReload = () => {
@@ -93,7 +93,7 @@ export default function ToiletFeedbackTable() {
       <DashboardHeader
         handleReload={handleReload}
         setRowPerPage={setRowPerPage}
-        loading={isPending}
+        loading={isFetching}
         totalPage={totalPageQuery.data || 0}
         page={page}
         rowPerPage={rowPerPage}
@@ -109,7 +109,7 @@ export default function ToiletFeedbackTable() {
         <TableBody
           items={data || []}
           loadingContent={<Spinner />}
-          loadingState={isPending ? "loading" : "idle"}
+          loadingState={isFetching ? "loading" : "idle"}
         >
           {(item) => (
             <TableRow key={item.id}>

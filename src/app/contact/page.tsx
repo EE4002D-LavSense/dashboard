@@ -1,7 +1,7 @@
 "use client";
 
-import { Input, Textarea, Button, Spacer, Card } from "@heroui/react";
-import { useState } from "react";
+import { Input, Textarea, Button, Card } from "@heroui/react";
+import { type FormEvent, useState } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ export default function ContactPage() {
     message: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -19,7 +19,7 @@ export default function ContactPage() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
     // Add form submission logic, e.g., sending data to an API

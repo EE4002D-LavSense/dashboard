@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -9,15 +8,17 @@ import {
   TableRow,
   TableCell,
   Chip,
-  ChipProps,
+  type ChipProps,
   Spinner,
 } from "@heroui/react";
-import { LogData } from "@/lib/definitions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useCallback, useEffect } from "react";
+
 import DashboardHeader from "@/components/common/dashboard-header";
 import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LOG_ROW_PER_PAGE } from "@/lib/constants";
-import { useSearchParams, useRouter } from "next/navigation";
+import { type LogData } from "@/lib/definitions";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Success: "success",
@@ -46,10 +47,9 @@ export default function LogTable() {
     router.replace(`?${params.toString()}`);
   }, [page, rowPerPage, router]);
 
-  const { isPending, data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ["logs", page, rowPerPage],
     queryFn: () => fetchApiLogs(page, rowPerPage),
-    staleTime: Infinity,
   });
 
   const getTotalPage = async () => {
@@ -60,7 +60,6 @@ export default function LogTable() {
   const totalPageQuery = useQuery({
     queryKey: ["totalPage", rowPerPage],
     queryFn: getTotalPage,
-    staleTime: Infinity,
   });
 
   const handleReload = () => {
@@ -98,7 +97,7 @@ export default function LogTable() {
     <>
       <DashboardHeader
         handleReload={handleReload}
-        loading={isPending}
+        loading={isFetching}
         totalPage={totalPageQuery.data || 0}
         page={page}
         handlePageChange={handlePageChange}
@@ -116,7 +115,7 @@ export default function LogTable() {
         <TableBody
           items={data || []}
           loadingContent={<Spinner />}
-          loadingState={isPending ? "loading" : "idle"}
+          loadingState={isFetching ? "loading" : "idle"}
         >
           {(item) => (
             <TableRow key={item.id}>

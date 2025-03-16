@@ -1,5 +1,5 @@
+import { type ToiletInfo } from "@/lib/definitions";
 import { addToilet } from "@/lib/queries/insert";
-import { ToiletInfo } from "@/lib/definitions";
 import { getToilet } from "@/lib/queries/select";
 
 export async function POST(req: Request) {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     await addToilet(toilet);
     return Response.json({ message: "Toilet added successfully" });
   } catch (error) {
-    return Response.json({ message: "Failed to add toilet" });
+    return Response.json({ message: "Failed to add toilet", error: error });
   }
 }
 
