@@ -1,7 +1,9 @@
 "use client";
 import { GoogleMap, Marker, InfoWindowF } from "@react-google-maps/api";
-import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
+import { useState, useEffect, useRef } from "react";
+
+import UserLocationMarker from "./user-location-marker";
 
 import {
   defaultDarkMapOptions,
@@ -11,7 +13,6 @@ import {
   defaultMapZoom,
   locationsData,
 } from "@/lib/map/constants";
-import UserLocationMarker from "./user-location-marker";
 
 export default function MainMap() {
   const [activeMarker, setActiveMarker] = useState("");
