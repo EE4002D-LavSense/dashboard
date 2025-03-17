@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LavSense
 
-## Getting Started
+LavSense is a smart toilet monitoring dashboard designed to track cleanliness, occupancy, and maintenance needs in real-time. It provides an intuitive interface for monitoring toilet conditions, notifying cleaners when maintenance is required, and allowing users to submit feedback.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+- **Real-time monitoring**: Displays cleanliness and occupancy status.
+- **Automated notifications**: Alerts sent to maintenance staff when attention is needed.
+- **User feedback system**: Allows users to report issues directly through the dashboard.
+- **Interactive map integration**: Uses Google Maps API for location-based tracking.
+- **AWS S3 integration**: Manages storage for relevant assets and logs.
+- **Database-driven analytics**: Uses PostgreSQL with Drizzle ORM for efficient data management.
+
+## Tech Stack
+
+- **Frontend**: Next.js (React, TypeScript, TailwindCSS, Framer Motion)
+- **Backend**: PostgreSQL, Drizzle ORM, NeonDB (serverless Postgres)
+- **Cloud & APIs**: AWS S3, Google Maps API, Deepgram API (speech-to-text for voice commands)
+- **State Management**: Tanstack React Query
+- **Linting & Formatting**: ESLint, Prettier
+
+## Prerequisites
+
+Ensure you have the following installed before setting up the project:
+
+- **Node.js** (LTS version recommended)
+- **pnpm** (Package manager)
+- **AWS account** (for S3 storage setup, if applicable)
+
+## Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/EE4002D-LavSense/dashboard.git
+   cd dashboard
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   pnpm install
+   ```
+
+3. Create a `.env.local` file and add the required API keys:
+
+   ```env
+   NEXT_PUBLIC_GOOGLE_MAP_API=YOUR_GOOGLE_MAP_API_KEY
+   DATABASE_URL=YOUR_DATABASE_URL
+   AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+   AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+   AWS_REGION=YOUR_AWS_REGION
+   AWS_BUCKET_NAME=YOUR_AWS_BUCKET_NAME
+   DG_API_KEY=YOUR_DG_API_KEY
+   ```
+
+## Usage
+
+### Development
+
+Run the project locally:
+
+```sh
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Build the project:
 
-## Learn More
+```sh
+pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+pnpm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database Management
 
-## Deploy on Vercel
+- **Generate migration files**: `pnpm db:generate`
+- **Apply migrations**: `pnpm db:push`
+- **Open database UI**: `pnpm db:studio`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Linting & Code Formatting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Run linting: `pnpm lint`
+- Fix lint issues: `pnpm lint:fix`
