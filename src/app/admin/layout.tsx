@@ -34,9 +34,7 @@ export default function AdminLayout({
             separator: "px-0",
           }}
         >
-          <BreadcrumbItem href="/admin" className="text-blue-600">
-            Admin
-          </BreadcrumbItem>
+          <BreadcrumbItem href="/">Home</BreadcrumbItem>
 
           {/* Dropdown for more options */}
           <BreadcrumbItem>
