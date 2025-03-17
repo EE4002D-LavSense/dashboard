@@ -68,7 +68,7 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="mb-4 mt-4 flex items-center justify-between gap-4">
+    <div className="mb-4 flex items-center justify-between gap-4">
       <div className="flex items-center">
         <Button
           isIconOnly

@@ -25,9 +25,9 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="flex flex-col p-4">
+    <div>
       {/* Breadcrumbs */}
-      <div>
+      <div className="p-2">
         <Breadcrumbs
           itemClasses={{
             item: "px-2",

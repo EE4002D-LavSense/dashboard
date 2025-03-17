@@ -2,11 +2,12 @@ import { Suspense } from "react";
 
 import LogTable from "./_components/log-table";
 import { TableShell } from "@/components/layouts/table-shell";
+import Title from "@/components/common/title";
 
 export default function DashboardPage() {
   return (
     <>
-      <h1 className="ml-2 mt-4 text-4xl font-bold">Log Dashboard</h1>
+      <Title title="Log Dashboard" />
       <TableShell>
         <Suspense>
           <LogTable />
