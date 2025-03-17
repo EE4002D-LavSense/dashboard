@@ -29,8 +29,8 @@ const smellColorMap: Record<string, ChipProps["color"]> = {
 };
 
 const genderColorMap: Record<string, string> = {
-  MALE: "bg-blue-200 text-blue-800 dark:bg-blue-700 dark:text-blue-300",
-  FEMALE: "bg-pink-200 text-pink-800 dark:bg-pink-700 dark:text-pink-300",
+  MALE: "primary",
+  FEMALE: "danger",
 };
 
 const toilets = mockData;
@@ -56,11 +56,10 @@ export default function DashboardTable() {
         case "gender":
           return (
             <Chip
-              classNames={{
-                base: `capitalize ${genderColorMap[toilet.gender]}`,
-              }}
+              className="capitalize"
               size="sm"
               variant="flat"
+              color={genderColorMap[toilet.gender] as ChipProps["color"]}
             >
               {cellValue}
             </Chip>
