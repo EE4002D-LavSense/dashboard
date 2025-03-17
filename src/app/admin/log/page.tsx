@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 
 import LogTable from "./_components/log-table";
-import { TableShell } from "@/components/layouts/table-shell";
+
 import Title from "@/components/common/title";
+import { TableShell } from "@/components/layouts/table-shell";
 
 export default function DashboardPage() {
   return (
