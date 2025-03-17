@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import ToiletFeedbackTable from "@/app/admin/dashboard/_components/toilet-feedback-table";
+import ToiletFeedbackTable from "@/app/admin/(dashboard)/_components/toilet-feedback-table";
 
 export default async function AdminDashboardPage() {
   return (
