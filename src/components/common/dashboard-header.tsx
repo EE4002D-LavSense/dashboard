@@ -1,7 +1,7 @@
 import { Button, Pagination, Select, SelectItem } from "@heroui/react";
 import { useEffect, useState } from "react";
 
-import { ReloadIcon } from "@/components/common/reload-icon";
+import { ReloadIcon } from "@/components/common/icons";
 
 // Define row options with key and label
 const rowOptions = [

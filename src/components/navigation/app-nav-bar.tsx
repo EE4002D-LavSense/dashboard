@@ -14,6 +14,8 @@ import {
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
+import ThemeSwitch from "../common/theme-switch";
+
 import { navBarItems } from "@/lib/navigation/constants";
 
 export function AppNavBar() {
@@ -67,6 +69,7 @@ export function AppNavBar() {
         <NavbarItem>
           <Button> Sign In </Button>
         </NavbarItem>
+        <ThemeSwitch />
       </NavbarContent>
       <NavbarMenu>
         {navBarItems.map((navItem) => (
@@ -84,6 +87,7 @@ export function AppNavBar() {
         <NavbarItem>
           <Button onPress={closeMenu}> Sign In </Button>
         </NavbarItem>
+        <ThemeSwitch />
       </NavbarMenu>
     </Navbar>
   );
