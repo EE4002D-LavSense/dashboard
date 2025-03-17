@@ -68,8 +68,9 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="mb-4 flex items-center justify-between gap-4">
-      <div className="flex items-center">
+    <div className="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+      {/* Top section: Reload button and select dropdown */}
+      <div className="flex w-full items-center justify-between md:w-auto">
         <Button
           isIconOnly
           onPress={handleReload}
@@ -79,10 +80,23 @@ export default function DashboardHeader({
         >
           <ReloadIcon />
         </Button>
+
+        <Select
+          label="Show"
+          labelPlacement="inside"
+          defaultSelectedKeys={[`${rowPerPage}`]}
+          onChange={(e) => handleRowChange(e.target.value)}
+          className="w-20 md:ml-4"
+          size="sm"
+          items={allRowOptions}
+        >
+          {(option) => <SelectItem key={option.key}>{option.label}</SelectItem>}
+        </Select>
       </div>
 
-      <div className="flex items-center gap-2">
-        {totalPage > 0 && (
+      {/* Pagination below on mobile, inline on larger screens */}
+      {totalPage > 0 && (
+        <div className="flex w-full justify-end">
           <Pagination
             isCompact
             showControls
@@ -92,20 +106,8 @@ export default function DashboardHeader({
             total={totalPage}
             onChange={handlePageChange}
           />
-        )}
-
-        <Select
-          label="Show"
-          labelPlacement="inside"
-          defaultSelectedKeys={[`${rowPerPage}`]}
-          onChange={(e) => handleRowChange(e.target.value)}
-          className="w-28"
-          size="sm"
-          items={allRowOptions}
-        >
-          {(option) => <SelectItem key={option.key}>{option.label}</SelectItem>}
-        </Select>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
