@@ -1,4 +1,4 @@
-import { Marker, Circle } from "@react-google-maps/api";
+import { Marker, CircleF } from "@react-google-maps/api";
 import { color } from "@/lib/map/constants";
 
 export default function UserLocationMarker({
@@ -21,7 +21,7 @@ export default function UserLocationMarker({
           strokeWeight: 2,
         }}
       />
-      <Circle
+      <CircleF
         center={{ lat: userLocation.lat, lng: userLocation.lng }}
         radius={userLocation.accuracy}
         options={{

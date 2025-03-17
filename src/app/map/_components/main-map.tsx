@@ -1,5 +1,5 @@
 "use client";
-import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
+import { GoogleMap, Marker, InfoWindowF } from "@react-google-maps/api";
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 
@@ -85,12 +85,12 @@ export default function MainMap() {
         {locationsData.map(
           (location) =>
             activeMarker === location.id && (
-              <InfoWindow
+              <InfoWindowF
                 key={location.id}
                 position={location.position}
                 onCloseClick={() => setActiveMarker("")}
               >
-                <div>
+                <div className="text-gray-800">
                   <h3 className="mb-2 font-semibold">
                     {location.name} Toilets
                   </h3>
@@ -102,7 +102,7 @@ export default function MainMap() {
                     ))}
                   </ul>
                 </div>
-              </InfoWindow>
+              </InfoWindowF>
             ),
         )}
         {/* User location marker and accuracy circle */}
