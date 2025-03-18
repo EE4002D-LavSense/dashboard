@@ -1,7 +1,7 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
 import { Input, Textarea, Button, Form } from "@heroui/react";
+import { type FormEvent, useState } from "react";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({

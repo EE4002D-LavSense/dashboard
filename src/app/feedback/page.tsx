@@ -1,5 +1,6 @@
+import { type Metadata } from "next";
+
 import ReportForm from "@/app/feedback/_components/report-form";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Feedback",

@@ -1,7 +1,9 @@
-import Title from "@/components/common/title";
 import { Card } from "@heroui/react";
-import { Metadata } from "next";
+import { type Metadata } from "next";
+
 import ContactForm from "./_components/contact-form";
+
+import Title from "@/components/common/title";
 
 export const metadata: Metadata = {
   title: "Contact Us",

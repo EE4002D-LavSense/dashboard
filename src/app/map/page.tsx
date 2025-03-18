@@ -1,6 +1,7 @@
+import { type Metadata } from "next";
+
 import MainMap from "@/app/map/_components/main-map";
 import { MapProvider } from "@/lib/providers/map-provider";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Map",

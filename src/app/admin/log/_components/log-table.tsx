@@ -16,8 +16,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 
 import DashboardHeader from "@/components/common/dashboard-header";
-import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
 import { LOG_ROW_PER_PAGE } from "@/components/table/constants";
+import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
 import { type LogData } from "@/lib/definitions";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
