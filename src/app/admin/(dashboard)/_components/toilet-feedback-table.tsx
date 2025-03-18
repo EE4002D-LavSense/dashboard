@@ -86,6 +86,14 @@ export default function ToiletFeedbackTable() {
     [],
   );
 
+  const getColumnByKey = (key: string) => {
+    return REPORTS_COLUMNS.find((col) => col.uid === key);
+  };
+
+  const getResponsiveColumns = () => {
+    return REPORTS_COLUMNS;
+  };
+
   return (
     <>
       <DashboardHeader
@@ -98,26 +106,41 @@ export default function ToiletFeedbackTable() {
         handlePageChange={handlePageChange}
         handleReset={handleReset}
       />
-      <Table aria-label="Toilet Reports Table">
-        <TableHeader columns={REPORTS_COLUMNS}>
-          {(column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={data || []}
-          loadingContent={<Spinner />}
-          loadingState={isFetching ? "loading" : "idle"}
-        >
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <div className="w-full overflow-x-auto">
+        <Table aria-label="Toilet Reports Table" className="min-w-full">
+          <TableHeader columns={getResponsiveColumns()}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                className={column.hideOnMobile ? "hidden md:table-cell" : ""}
+              >
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody
+            items={data || []}
+            loadingContent={<Spinner />}
+            loadingState={isFetching ? "loading" : "idle"}
+          >
+            {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => (
+                  <TableCell
+                    className={
+                      getColumnByKey(columnKey as string)?.hideOnMobile
+                        ? "hidden md:table-cell"
+                        : ""
+                    }
+                  >
+                    {renderCell(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </>
   );
 }
