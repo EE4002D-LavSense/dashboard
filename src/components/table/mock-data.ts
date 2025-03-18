@@ -1,7 +1,7 @@
 export const mockData = [
   {
     id: 1,
-    name: "E1-1",
+    name: "E1-1-MALE",
     location: "Engineering",
     gender: "MALE",
     occupancy: "Full",
@@ -9,7 +9,7 @@ export const mockData = [
   },
   {
     id: 2,
-    name: "E1-2",
+    name: "E1-2-FEMALE",
     location: "Engineering",
     gender: "FEMALE",
     occupancy: "Busy",
@@ -17,7 +17,7 @@ export const mockData = [
   },
   {
     id: 3,
-    name: "E1-3",
+    name: "E1-3-MALE",
     location: "Engineering",
     gender: "MALE",
     occupancy: "Free",

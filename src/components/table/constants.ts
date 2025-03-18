@@ -1,7 +1,7 @@
-export const dashboard_columns = [
-  { name: "NAME", uid: "name" },
-  { name: "LOCATION", uid: "location" },
-  { name: "GENDER", uid: "gender" },
+export const DASHBOARD_COLUMNS = [
+  { name: "NAME", uid: "name", hideOnMobile: false },
+  { name: "LOCATION", uid: "location", hideOnMobile: true },
+  { name: "GENDER", uid: "gender", hideOnMobile: true },
   { name: "OCCUPANCY", uid: "occupancy" },
   { name: "SMELL", uid: "smell" },
 ];

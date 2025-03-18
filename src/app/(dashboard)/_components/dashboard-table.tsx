@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-import { dashboard_columns } from "@/components/table/constants";
+import { DASHBOARD_COLUMNS } from "@/components/table/constants";
 import { mockData } from "@/components/table/mock-data";
 import { type ToiletDashboardData } from "@/lib/definitions";
 
@@ -34,6 +34,15 @@ const genderColorMap: Record<string, string> = {
 };
 
 const toilets = mockData;
+
+const getDashboardColumnByKey = (key: string) => {
+  return DASHBOARD_COLUMNS.find((col) => col.uid === key);
+};
+
+// Function to get responsive columns based on screen size
+const getResponsiveDashboardColumns = () => {
+  return DASHBOARD_COLUMNS;
+};
 
 export default function DashboardTable() {
   const renderCell = React.useCallback(
@@ -94,26 +103,37 @@ export default function DashboardTable() {
   );
 
   return (
-    <Table aria-label="Main Dashboard Table">
-      <TableHeader columns={dashboard_columns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={toilets}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className="w-full overflow-x-auto">
+      <Table aria-label="Main Dashboard Table">
+        <TableHeader columns={getResponsiveDashboardColumns()}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              className={column.hideOnMobile ? "hidden md:table-cell" : ""}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={toilets}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell
+                  className={
+                    getDashboardColumnByKey(columnKey as string)?.hideOnMobile
+                      ? "hidden md:table-cell"
+                      : ""
+                  }
+                >
+                  {renderCell(item, columnKey)}
+                </TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
