@@ -1,3 +1,11 @@
+export const dashboard_columns = [
+  { name: "NAME", uid: "name" },
+  { name: "LOCATION", uid: "location" },
+  { name: "GENDER", uid: "gender" },
+  { name: "OCCUPANCY", uid: "occupancy" },
+  { name: "SMELL", uid: "smell" },
+];
+
 export const REPORTS_COLUMNS = [
   { uid: "createdAt", name: "Date & Time", hideOnMobile: true },
   { uid: "location", name: "Location", hideOnMobile: false },

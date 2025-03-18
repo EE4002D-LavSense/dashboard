@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-import { dashboard_columns } from "@/components/table/contants";
+import { dashboard_columns } from "@/components/table/constants";
 import { mockData } from "@/components/table/mock-data";
 import { type ToiletDashboardData } from "@/lib/definitions";
 

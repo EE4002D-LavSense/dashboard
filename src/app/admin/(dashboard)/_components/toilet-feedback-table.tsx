@@ -17,7 +17,10 @@ import { renderFileDropdown } from "./dropdown";
 
 import DashboardHeader from "@/components/common/dashboard-header";
 import { fetchReports, fetchReportsCount } from "@/lib/actions";
-import { REPORTS_COLUMNS, REPORT_ROW_PER_PAGE } from "@/lib/constants";
+import {
+  REPORTS_COLUMNS,
+  REPORT_ROW_PER_PAGE,
+} from "@/components/table/constants";
 import { type ToiletReportTable } from "@/lib/definitions";
 
 export default function ToiletFeedbackTable() {
