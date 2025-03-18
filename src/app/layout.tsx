@@ -12,7 +12,10 @@ import { cn } from "@/lib/tailwind/utils";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "LavSense",
+  title: {
+    template: "%s | LavSense",
+    default: "LavSense",
+  },
   description: "Smart Washroom Monitoring",
 };
 

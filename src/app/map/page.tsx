@@ -1,5 +1,10 @@
 import MainMap from "@/app/map/_components/main-map";
 import { MapProvider } from "@/lib/providers/map-provider";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Map",
+};
 
 export default function MapPage() {
   return (
