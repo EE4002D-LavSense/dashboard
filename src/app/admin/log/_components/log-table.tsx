@@ -16,14 +16,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 
 import DashboardHeader from "@/components/common/dashboard-header";
-import { LOG_ROW_PER_PAGE } from "@/components/table/constants";
+import { LOG_COLUMNS, LOG_ROW_PER_PAGE } from "@/components/table/constants";
 import { fetchApiLogs, fetchLogsCount } from "@/lib/actions";
 import { type LogData } from "@/lib/definitions";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  Success: "success",
-  Warning: "warning",
-  Error: "danger",
+  OK: "success",
+  error: "danger",
 };
 
 export default function LogTable() {
@@ -86,13 +85,23 @@ export default function LogTable() {
             {cellValue}
           </Chip>
         );
+      case "data":
+        return <p>{(cellValue as string).replaceAll(",", ", ")}</p>;
       default:
         return cellValue;
     }
   }, []);
 
+  const getColumnByKey = (key: string) => {
+    return LOG_COLUMNS.find((col) => col.uid === key);
+  };
+
+  const getResponsiveColumns = () => {
+    return LOG_COLUMNS;
+  };
+
   return (
-    <>
+    <div className="w-full">
       <DashboardHeader
         handleReload={handleReload}
         loading={isFetching}
@@ -104,11 +113,15 @@ export default function LogTable() {
         handleReset={handleReset}
       />
       <Table aria-label="Log Table">
-        <TableHeader>
-          <TableColumn key="timestamp">Timestamp</TableColumn>
-          <TableColumn key="method">Method</TableColumn>
-          <TableColumn key="status">Status</TableColumn>
-          <TableColumn key="data">Message</TableColumn>
+        <TableHeader columns={getResponsiveColumns()}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              className={column.hideOnMobile ? "hidden md:table-cell" : ""}
+            >
+              {column.name}
+            </TableColumn>
+          )}
         </TableHeader>
         <TableBody
           items={data || []}
@@ -118,12 +131,20 @@ export default function LogTable() {
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell
+                  className={
+                    getColumnByKey(columnKey as string)?.hideOnMobile
+                      ? "hidden md:table-cell"
+                      : ""
+                  }
+                >
+                  {renderCell(item, columnKey)}
+                </TableCell>
               )}
             </TableRow>
           )}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }
