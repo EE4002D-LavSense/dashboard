@@ -42,6 +42,8 @@ export async function fetchLogsCount() {
 export async function fetchApiLogs(page: number, rowPerPage: number) {
   return (await getApiLogs(page, rowPerPage)).map((log) => ({
     ...log,
-    timestamp: new Date(log.timestamp).toLocaleString("en-GB"),
+    timestamp: new Date(log.timestamp).toLocaleString("en-GB", {
+      timeZone: "Asia/Singapore",
+    }),
   }));
 }

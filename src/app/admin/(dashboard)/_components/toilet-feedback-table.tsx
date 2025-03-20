@@ -74,7 +74,7 @@ export default function ToiletFeedbackTable() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleString("en-GB");
+    return date.toLocaleString("en-GB", { timeZone: "Asia/Singapore" });
   };
 
   const renderCell = useCallback(
