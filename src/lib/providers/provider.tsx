@@ -1,5 +1,6 @@
 "use client";
 
+import { ClerkProvider } from "@clerk/nextjs";
 import { HeroUIProvider } from "@heroui/react";
 import { ToastProvider } from "@heroui/toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -23,14 +24,16 @@ export function Providers(props: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <HeroUIProvider navigate={router.push}>
-        <NextThemesProvider attribute="class" defaultTheme="system">
-          <ToastProvider />
-          {props.children}
-        </NextThemesProvider>
-      </HeroUIProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ClerkProvider>
+      <QueryClientProvider client={queryClient}>
+        <HeroUIProvider navigate={router.push}>
+          <NextThemesProvider attribute="class" defaultTheme="system">
+            <ToastProvider />
+            {props.children}
+          </NextThemesProvider>
+        </HeroUIProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ClerkProvider>
   );
 }

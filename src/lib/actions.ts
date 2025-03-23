@@ -2,12 +2,14 @@
 
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { auth } from "@clerk/nextjs/server";
 
 import {
   getApiLogs,
   getApiLogsCount,
   getToiletReports,
   getToiletReportsCount,
+  isAdmin,
 } from "@/lib/queries/select";
 import { getAllToilets } from "@/lib/queries/select";
 
@@ -46,4 +48,12 @@ export async function fetchApiLogs(page: number, rowPerPage: number) {
       timeZone: "Asia/Singapore",
     }),
   }));
+}
+
+export async function checkIsAdmin() {
+  const { userId } = await auth();
+  if (!userId) {
+    return false;
+  }
+  return isAdmin(userId);
 }

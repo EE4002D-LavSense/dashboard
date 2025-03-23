@@ -4,6 +4,7 @@ import { getS3FileUrl } from "../actions";
 
 import { db } from "@/lib/db";
 import {
+  usersTable,
   apiLogsTable,
   reportFilesTable,
   reportsTable,
@@ -139,4 +140,12 @@ export async function getToiletName(toiletId: string) {
     .from(toiletsTable)
     .where(eq(toiletsTable.id, id));
   return res[0].building + "-" + res[0].floor + "-" + res[0].type;
+}
+
+export async function isAdmin(userId: string): Promise<boolean> {
+  const res = await db
+    .select()
+    .from(usersTable)
+    .where(and(eq(usersTable.id, userId), eq(usersTable.role, "admin")));
+  return res.length > 0;
 }

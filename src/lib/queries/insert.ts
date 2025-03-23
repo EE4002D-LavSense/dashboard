@@ -6,6 +6,7 @@ import {
   reportFilesTable,
   reportsTable,
   toiletsTable,
+  usersTable,
 } from "@/lib/db/schema";
 import { type ToiletInfo } from "@/lib/definitions";
 
@@ -38,4 +39,16 @@ export async function addApiLog(data: {
   status: string;
 }) {
   await db.insert(apiLogsTable).values(data);
+}
+
+export async function addUser(
+  userId: string,
+  first_name: string | null,
+  last_name: string | null,
+  email: string,
+) {
+  console.log("Adding user", userId, first_name, last_name, email);
+  await db
+    .insert(usersTable)
+    .values({ id: userId, first_name, last_name, email });
 }
