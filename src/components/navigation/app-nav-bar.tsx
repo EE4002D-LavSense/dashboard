@@ -17,7 +17,9 @@ import React, { useState } from "react";
 
 import ThemeSwitch from "../common/theme-switch";
 
+import { useQuery } from "@tanstack/react-query";
 import { navBarItems } from "@/lib/navigation/constants";
+import { checkIsAdmin } from "@/lib/actions";
 
 export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,6 +33,15 @@ export function AppNavBar() {
   const isSamePath = (path: string) => {
     return pathname.split("/")[1] === path.replace("/", "");
   };
+
+  const getAdminStatus = async () => {
+    return await checkIsAdmin();
+  };
+
+  const isAdmin = useQuery({
+    queryKey: ["isAdmin"],
+    queryFn: getAdminStatus,
+  });
 
   return (
     <Navbar
@@ -57,16 +68,27 @@ export function AppNavBar() {
       </NavbarContent>
 
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        {navBarItems.map((navItem) => (
-          <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
-            <Link
-              href={navItem.href}
-              color={isSamePath(navItem.href) ? "primary" : "foreground"}
-            >
-              {navItem.name}
-            </Link>
-          </NavbarItem>
-        ))}
+        {navBarItems.map((navItem) =>
+          navItem.public ? (
+            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
+              <Link
+                href={navItem.href}
+                color={isSamePath(navItem.href) ? "primary" : "foreground"}
+              >
+                {navItem.name}
+              </Link>
+            </NavbarItem>
+          ) : isAdmin.data ? (
+            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
+              <Link
+                href={navItem.href}
+                color={isSamePath(navItem.href) ? "primary" : "foreground"}
+              >
+                {navItem.name}
+              </Link>
+            </NavbarItem>
+          ) : null,
+        )}
         <ThemeSwitch />
       </NavbarContent>
       <SignedOut>
@@ -78,18 +100,31 @@ export function AppNavBar() {
         <UserButton />
       </SignedIn>
       <NavbarMenu>
-        {navBarItems.map((navItem) => (
-          <NavbarMenuItem key={navItem.href}>
-            <Link
-              href={navItem.href}
-              color={isSamePath(navItem.href) ? "primary" : "foreground"}
-              className="w-full"
-              onPress={closeMenu}
-            >
-              {navItem.name}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+        {navBarItems.map((navItem) =>
+          navItem.public ? (
+            <NavbarMenuItem key={navItem.href}>
+              <Link
+                href={navItem.href}
+                color={isSamePath(navItem.href) ? "primary" : "foreground"}
+                className="w-full"
+                onPress={closeMenu}
+              >
+                {navItem.name}
+              </Link>
+            </NavbarMenuItem>
+          ) : isAdmin.data ? (
+            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
+              <Link
+                href={navItem.href}
+                color={isSamePath(navItem.href) ? "primary" : "foreground"}
+                className="w-full"
+                onPress={closeMenu}
+              >
+                {navItem.name}
+              </Link>
+            </NavbarItem>
+          ) : null,
+        )}
         <ThemeSwitch />
       </NavbarMenu>
     </Navbar>

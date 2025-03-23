@@ -8,8 +8,10 @@ import {
   getApiLogsCount,
   getToiletReports,
   getToiletReportsCount,
+  isAdmin,
 } from "@/lib/queries/select";
 import { getAllToilets } from "@/lib/queries/select";
+import { auth } from "@clerk/nextjs/server";
 
 export async function getS3FileUrl(key: string) {
   const client = new S3Client({ region: process.env.AWS_REGION });
@@ -46,4 +48,12 @@ export async function fetchApiLogs(page: number, rowPerPage: number) {
       timeZone: "Asia/Singapore",
     }),
   }));
+}
+
+export async function checkIsAdmin() {
+  const { userId } = await auth();
+  if (!userId) {
+    return false;
+  }
+  return isAdmin(userId);
 }
