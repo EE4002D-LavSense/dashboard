@@ -13,6 +13,7 @@ import {
 } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import ThemeSwitch from "../common/theme-switch";
 
@@ -66,11 +67,16 @@ export function AppNavBar() {
             </Link>
           </NavbarItem>
         ))}
-        <NavbarItem>
-          <Button> Sign In </Button>
-        </NavbarItem>
         <ThemeSwitch />
       </NavbarContent>
+      <SignedOut>
+        <SignInButton>
+          <Button>Sign In</Button>
+        </SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
       <NavbarMenu>
         {navBarItems.map((navItem) => (
           <NavbarMenuItem key={navItem.href}>
@@ -84,9 +90,6 @@ export function AppNavBar() {
             </Link>
           </NavbarMenuItem>
         ))}
-        <NavbarItem>
-          <Button onPress={closeMenu}> Sign In </Button>
-        </NavbarItem>
         <ThemeSwitch />
       </NavbarMenu>
     </Navbar>

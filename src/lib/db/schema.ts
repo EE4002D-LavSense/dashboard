@@ -5,13 +5,17 @@ import {
   text,
   timestamp,
   serial,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
+export const rolesEnum = pgEnum("roles", ["user", "admin"]);
+
 export const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+  id: varchar("id", { length: 255 }).primaryKey(),
+  first_name: varchar("first_name", { length: 255 }),
+  last_name: varchar("last_name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  role: rolesEnum().default("user"),
 });
 
 export const toiletsTable = pgTable("toilets", {

@@ -9,6 +9,7 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
+    "ngrok": "ngrok http --url=enabling-oarfish-hopelessly.ngrok-free.app 3000",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
@@ -24,6 +25,7 @@
     "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/s3-presigned-post": "^3.750.0",
     "@aws-sdk/s3-request-presigner": "^3.758.0",
+    "@clerk/nextjs": "^6.12.8",
     "@deepgram/sdk": "^3.11.2",
     "@heroui/react": "2.7.5",
     "@neondatabase/api-client": "^1.11.5",
@@ -44,6 +46,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sonner": "^1.5.0",
+    "svix": "^1.62.0",
     "tailwind-merge": "^2.5.4",
     "uuid": "^11.1.0"
   },

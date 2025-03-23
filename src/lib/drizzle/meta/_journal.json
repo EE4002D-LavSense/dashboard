@@ -43,6 +43,34 @@
       "when": 1740590503819,
       "tag": "0005_pretty_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1742742639758,
+      "tag": "0006_complete_the_liberteens",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1742742740070,
+      "tag": "0007_medical_skrulls",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1742744273319,
+      "tag": "0008_even_wilson_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1742749242964,
+      "tag": "0009_clumsy_cerise",
+      "breakpoints": true
     }
   ]
 }
