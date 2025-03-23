@@ -12,14 +12,14 @@ import {
   Button,
   NavbarMenuToggle,
 } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 import ThemeSwitch from "../common/theme-switch";
 
-import { useQuery } from "@tanstack/react-query";
-import { navBarItems } from "@/lib/navigation/constants";
 import { checkIsAdmin } from "@/lib/actions";
+import { navBarItems } from "@/lib/navigation/constants";
 
 export function AppNavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

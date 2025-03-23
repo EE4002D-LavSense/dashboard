@@ -2,6 +2,7 @@
 
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { auth } from "@clerk/nextjs/server";
 
 import {
   getApiLogs,
@@ -11,7 +12,6 @@ import {
   isAdmin,
 } from "@/lib/queries/select";
 import { getAllToilets } from "@/lib/queries/select";
-import { auth } from "@clerk/nextjs/server";
 
 export async function getS3FileUrl(key: string) {
   const client = new S3Client({ region: process.env.AWS_REGION });

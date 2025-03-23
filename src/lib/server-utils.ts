@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
+import { notFound } from "next/navigation";
 
 import { isAdmin } from "./queries/select";
-import { notFound } from "next/navigation";
 
 export async function checkAdmin() {
   const { userId } = await auth();
