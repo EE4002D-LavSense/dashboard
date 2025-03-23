@@ -1,6 +1,7 @@
-import { Webhook } from "svix";
+import { type WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { Webhook } from "svix";
+
 import { addUser } from "@/lib/queries/insert";
 
 export async function POST(req: Request) {

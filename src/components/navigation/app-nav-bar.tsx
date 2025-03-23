@@ -1,5 +1,6 @@
 "use client";
 
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   Navbar,
   NavbarBrand,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import ThemeSwitch from "../common/theme-switch";
 
