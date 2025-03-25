@@ -11,7 +11,8 @@ export const REPORTS_COLUMNS = [
   { uid: "location", name: "Location", hideOnMobile: false },
   { uid: "description", name: "Description", hideOnMobile: false },
   { uid: "remarks", name: "Remarks", hideOnMobile: true },
-  { uid: "fileUrls", name: "Files", hideOnMobile: false },
+  { uid: "status", name: "Status", hideOnMobile: false },
+  { uid: "fileUrls", name: "Files", hideOnMobile: true },
 ];
 
 export const LOG_COLUMNS = [

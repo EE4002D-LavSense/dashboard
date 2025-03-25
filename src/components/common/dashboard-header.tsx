@@ -22,6 +22,7 @@ export default function DashboardHeader({
   rowPerPage,
   setRowPerPage,
   handleReset,
+  ToggleButton = null,
 }: {
   handleReload: () => void;
   loading: boolean;
@@ -31,6 +32,7 @@ export default function DashboardHeader({
   rowPerPage: number;
   setRowPerPage: (rowPerPage: number) => void;
   handleReset: () => void;
+  ToggleButton?: React.ReactElement | null;
 }) {
   // Find the current row option or create a new one if not found
   const getRowOption = (value: number) => {
@@ -68,9 +70,9 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+    <div className="mb-4 flex flex-col gap-4 md:flex-row">
       {/* Top section: Reload button and select dropdown */}
-      <div className="flex w-full items-center justify-between md:w-auto">
+      <div className="flex gap-2 md:w-auto">
         <Button
           isIconOnly
           onPress={handleReload}
@@ -86,12 +88,13 @@ export default function DashboardHeader({
           labelPlacement="inside"
           defaultSelectedKeys={[`${rowPerPage}`]}
           onChange={(e) => handleRowChange(e.target.value)}
-          className="w-20 md:ml-4"
+          className="w-20"
           size="sm"
           items={allRowOptions}
         >
           {(option) => <SelectItem key={option.key}>{option.label}</SelectItem>}
         </Select>
+        {ToggleButton ? ToggleButton : null}
       </div>
 
       {/* Pagination below on mobile, inline on larger screens */}
