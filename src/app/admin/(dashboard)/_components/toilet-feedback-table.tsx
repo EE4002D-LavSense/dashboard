@@ -135,9 +135,12 @@ export default function ToiletFeedbackTable() {
       <Button
         className="flex justify-end"
         onPress={() => {
-          toggleReportStatusMutation.mutate(
-            Array.from(selectedKeys) as number[],
-          );
+          const idsToToggle =
+            selectedKeys === "all"
+              ? (data?.map((item) => item.id) ?? [])
+              : (Array.from(selectedKeys) as number[]);
+
+          toggleReportStatusMutation.mutate(idsToToggle);
         }}
       >
         Toggle Status
