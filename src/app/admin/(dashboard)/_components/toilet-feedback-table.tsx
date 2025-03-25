@@ -8,8 +8,11 @@ import {
   TableRow,
   TableCell,
   Spinner,
+  Button,
+  Chip,
 } from "@heroui/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Selection } from "@heroui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
 
@@ -20,12 +23,22 @@ import {
   REPORTS_COLUMNS,
   REPORT_ROW_PER_PAGE,
 } from "@/components/table/constants";
-import { fetchReports, fetchReportsCount } from "@/lib/actions";
+import {
+  fetchReports,
+  fetchReportsCount,
+  toggleReportStatusAction,
+} from "@/lib/actions";
 import { type ToiletReportTable } from "@/lib/definitions";
 
 export default function ToiletFeedbackTable() {
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Get values from URL or fallback to default
   const initialPage = Number(searchParams.get("page")) || 1;
@@ -35,6 +48,16 @@ export default function ToiletFeedbackTable() {
   const [rowPerPage, setRowPerPage] = useState(initialRows);
 
   const queryClient = useQueryClient();
+
+  const toggleReportStatusMutation = useMutation({
+    mutationFn: (reportIds: number[]) => {
+      return toggleReportStatusAction(reportIds);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reports", page] });
+      setSelectedKeys(new Set());
+    },
+  });
 
   useEffect(() => {
     // Update URL when state changes
@@ -84,6 +107,16 @@ export default function ToiletFeedbackTable() {
         return formatDate(cellValue as string);
       if (columnKey === "fileUrls")
         return renderFileDropdown(cellValue as string[]);
+      if (columnKey === "status")
+        return (
+          <Chip
+            color={cellValue === "pending" ? "warning" : "success"}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
+        );
       return cellValue;
     },
     [],
@@ -97,6 +130,23 @@ export default function ToiletFeedbackTable() {
     return REPORTS_COLUMNS;
   };
 
+  const ToggleButton = () => {
+    return (
+      <Button
+        className="flex justify-end"
+        onPress={() => {
+          toggleReportStatusMutation.mutate(
+            Array.from(selectedKeys) as number[],
+          );
+        }}
+      >
+        Toggle Status
+      </Button>
+    );
+  };
+
+  if (!isClient) return <Spinner />;
+
   return (
     <>
       <DashboardHeader
@@ -108,9 +158,16 @@ export default function ToiletFeedbackTable() {
         rowPerPage={rowPerPage}
         handlePageChange={handlePageChange}
         handleReset={handleReset}
+        ToggleButton={<ToggleButton />}
       />
       <div className="w-full overflow-x-auto">
-        <Table aria-label="Toilet Reports Table" className="min-w-full">
+        <Table
+          aria-label="Toilet Reports Table"
+          className="min-w-full"
+          selectedKeys={selectedKeys}
+          selectionMode="multiple"
+          onSelectionChange={setSelectedKeys}
+        >
           <TableHeader columns={getResponsiveColumns()}>
             {(column) => (
               <TableColumn

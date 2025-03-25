@@ -38,4 +38,5 @@ export type ToiletReportTable = {
   remarks?: string;
   createdAt: string;
   fileUrls?: string[];
+  status: string;
 };

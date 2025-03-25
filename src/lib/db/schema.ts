@@ -9,6 +9,10 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const rolesEnum = pgEnum("roles", ["user", "admin"]);
+export const reportStatusEnum = pgEnum("report_status", [
+  "pending",
+  "resolved",
+]);
 
 export const usersTable = pgTable("users", {
   id: varchar("id", { length: 255 }).primaryKey(),
@@ -34,6 +38,7 @@ export const reportsTable = pgTable("reports", {
   description: text("description").notNull(), // Problem description
   remarks: text("remarks"), // Additional remarks (optional)
   createdAt: timestamp("created_at").defaultNow().notNull(), // Timestamp of report submission
+  status: reportStatusEnum().default("pending").notNull(), // Status of report
 });
 
 export const reportFilesTable = pgTable("report_files", {

@@ -4,6 +4,8 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { auth } from "@clerk/nextjs/server";
 
+import { toggleReportStatus } from "./queries/update";
+
 import {
   getApiLogs,
   getApiLogsCount,
@@ -56,4 +58,8 @@ export async function checkIsAdmin() {
     return false;
   }
   return isAdmin(userId);
+}
+
+export async function toggleReportStatusAction(reportIds: number[]) {
+  await toggleReportStatus(reportIds);
 }

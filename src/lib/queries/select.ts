@@ -88,6 +88,7 @@ async function fetchToiletReports(page: number, rowsPerPage: number) {
       location: reportsTable.location,
       description: reportsTable.description,
       remarks: reportsTable.remarks,
+      status: reportsTable.status,
       createdAt: reportsTable.createdAt,
       fileUrls: sql<string[]>`array_agg(${reportFilesTable.filePath})`.as(
         "fileUrls",
@@ -118,6 +119,7 @@ async function formatReportRow(row: {
   description: string;
   remarks: string | null;
   createdAt: { toLocaleString: () => string };
+  status: string;
   fileUrls: string[];
   location: string;
 }) {

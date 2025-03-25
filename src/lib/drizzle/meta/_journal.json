@@ -71,6 +71,13 @@
       "when": 1742749242964,
       "tag": "0009_clumsy_cerise",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1742924731766,
+      "tag": "0010_loose_mysterio",
+      "breakpoints": true
     }
   ]
 }
