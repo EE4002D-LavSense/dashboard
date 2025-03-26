@@ -75,23 +75,20 @@ export default function ReportForm() {
     setLoading(false);
   };
 
-  const transcribe = useCallback(
-    async (audioFile: File) => {
-      try {
-        const audioFormData = new FormData();
-        audioFormData.append("audio", audioFile as File);
-        const response = await fetch("/api/transcribe", {
-          method: "POST",
-          body: audioFormData,
-        });
-        const transcript = await response.json();
-        setDescription(transcript.message);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [audioFile],
-  );
+  const transcribe = useCallback(async (audioFile: File) => {
+    try {
+      const audioFormData = new FormData();
+      audioFormData.append("audio", audioFile as File);
+      const response = await fetch("/api/transcribe", {
+        method: "POST",
+        body: audioFormData,
+      });
+      const transcript = await response.json();
+      setDescription(transcript.message);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   const fileToFileList = (file: File): FileList => {
     const dataTransfer = new DataTransfer();
