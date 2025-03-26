@@ -32,7 +32,7 @@ export default function ReportForm() {
   const [remarks, setRemarks] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
-  const [photos, setPhotos] = useState<FileList | null>(null);
+  const [files, setFiles] = useState<FileList | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -63,7 +63,7 @@ export default function ReportForm() {
     setLocation("");
     setDescription("");
     setRemarks("");
-    setPhotos(null);
+    setFiles(null);
     setAudioFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
@@ -74,20 +74,23 @@ export default function ReportForm() {
     setLoading(false);
   };
 
-  const transcribe = useCallback(async () => {
-    try {
-      const audioFormData = new FormData();
-      audioFormData.append("audio", audioFile as File);
-      const response = await fetch("/api/transcribe", {
-        method: "POST",
-        body: audioFormData,
-      });
-      const transcript = await response.json();
-      setDescription(transcript.message);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [audioFile]);
+  const transcribe = useCallback(
+    async (audioFile: File) => {
+      try {
+        const audioFormData = new FormData();
+        audioFormData.append("audio", audioFile as File);
+        const response = await fetch("/api/transcribe", {
+          method: "POST",
+          body: audioFormData,
+        });
+        const transcript = await response.json();
+        setDescription(transcript.message);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [audioFile],
+  );
 
   const fileToFileList = (file: File): FileList => {
     const dataTransfer = new DataTransfer();
@@ -103,13 +106,13 @@ export default function ReportForm() {
     dbFormData.append("location", location);
     dbFormData.append("description", description);
     dbFormData.append("remarks", remarks);
-    if (photos || audioFile) {
+    if (files || audioFile) {
       try {
         const uploadPromises = [];
 
         // Add photos upload promise if photos exist
-        if (photos && photos.length > 0) {
-          uploadPromises.push(uploadFiles(photos));
+        if (files && files.length > 0) {
+          uploadPromises.push(uploadFiles(files));
         }
 
         // Add audio upload promise if audio exists
@@ -177,7 +180,7 @@ export default function ReportForm() {
   useEffect(() => {
     if (!audioFile) return;
     setDescription("Transcribing audio ...");
-    transcribe();
+    transcribe(audioFile);
   }, [audioFile, transcribe]);
 
   useEffect(() => {
@@ -197,7 +200,7 @@ export default function ReportForm() {
         <CardBody>
           <Form onSubmit={handleSubmit}>
             {/* Toilet Location */}
-            <label className="mb-2 block font-medium">Toilet Location</label>
+            <label className="mb-2 block font-medium">Location</label>
             <Select
               label="Select location"
               selectedKeys={location ? new Set([location]) : new Set()}
@@ -218,15 +221,15 @@ export default function ReportForm() {
             </Select>
 
             {/* Upload Photos/Files */}
-            <label className="mb-2 block font-medium">Upload Photos</label>
+            <label className="mb-2 block font-medium">Upload File(s)</label>
             <div className="mb-4 flex gap-2">
               <Input
                 type="file"
                 multiple
                 ref={fileInputRef}
-                onChange={(e) => setPhotos(e.target.files)}
+                onChange={(e) => setFiles(e.target.files)}
                 className="w-full rounded-md"
-                accept="image/*"
+                accept="image/*,audio/*"
               />
               <Button
                 type="button"
@@ -242,15 +245,20 @@ export default function ReportForm() {
             <CameraCapture
               isCameraOpen={isCameraOpen}
               closeCamera={closeCamera}
-              setPhotos={setPhotos}
+              setPhotos={setFiles}
               stream={stream}
-              photos={photos}
+              photos={files}
             />
 
             {/* Record Audio Section */}
             <AudioCapture setAudioFile={setAudioFile} />
             {/* Show preview of selected files */}
-            <FilePreview photos={photos} audioFile={audioFile} />
+            <FilePreview
+              photos={files}
+              audioFile={audioFile}
+              setFiles={setFiles}
+              setAudioFile={setAudioFile}
+            />
 
             {/* Problem Description */}
             <label className="block font-medium">Description</label>

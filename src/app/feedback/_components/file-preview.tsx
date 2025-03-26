@@ -1,14 +1,39 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 
 export function FilePreview({
   photos,
   audioFile,
+  setFiles,
+  setAudioFile,
 }: {
   photos: FileList | null;
   audioFile: File | null;
+  setFiles: (files: FileList | null) => void;
+  setAudioFile: (file: File | null) => void;
 }) {
+  useEffect(() => {
+    if (!photos) return;
+
+    const dataTransfer = new DataTransfer();
+    let foundAudio: File | null = null;
+
+    Array.from(photos).forEach((file) => {
+      if (file.type.includes("audio") && !foundAudio) {
+        foundAudio = file; // Assign the first audio file found
+      } else {
+        dataTransfer.items.add(file); // Keep non-audio files
+      }
+    });
+
+    if (foundAudio) {
+      setAudioFile(foundAudio);
+      setFiles(dataTransfer.files); // Update photos without audio files
+    }
+  }, [photos, setAudioFile, setFiles]);
+
   return (
     <>
       {photos && photos.length > 0 && (
@@ -38,7 +63,10 @@ export function FilePreview({
         <div className="mb-4">
           <p className="mb-2 text-sm font-medium">1 audio file selected</p>
           <audio controls playsInline>
-            <source src={URL.createObjectURL(audioFile)} type="audio/mpeg" />
+            <source
+              src={URL.createObjectURL(audioFile)}
+              type={audioFile.type}
+            />
             Your browser does not support the audio element.
           </audio>
         </div>
