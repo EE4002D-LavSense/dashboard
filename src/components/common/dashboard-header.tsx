@@ -5,12 +5,12 @@ import { ReloadIcon } from "@/components/common/icons";
 
 // Define row options with key and label
 const rowOptions = [
-  { key: "8", label: "8" },
-  { key: "10", label: "10" },
-  { key: "15", label: "15" },
-  { key: "20", label: "20" },
-  { key: "25", label: "25" },
-  { key: "50", label: "50" },
+  { key: "8", label: "8 rows" },
+  { key: "10", label: "10 rows" },
+  { key: "15", label: "15 rows" },
+  { key: "20", label: "20 rows" },
+  { key: "25", label: "25 rows" },
+  { key: "50", label: "50 rows" },
 ];
 
 export default function DashboardHeader({
@@ -72,7 +72,7 @@ export default function DashboardHeader({
   return (
     <div className="mb-4 flex flex-col gap-4 md:flex-row">
       {/* Top section: Reload button and select dropdown */}
-      <div className="flex gap-2 md:w-auto">
+      <div className="flex w-full gap-2">
         <Button
           isIconOnly
           onPress={handleReload}
@@ -84,12 +84,10 @@ export default function DashboardHeader({
         </Button>
 
         <Select
-          label="Show"
-          labelPlacement="inside"
           defaultSelectedKeys={[`${rowPerPage}`]}
           onChange={(e) => handleRowChange(e.target.value)}
-          className="w-20"
-          size="sm"
+          className="w-32"
+          size="md"
           items={allRowOptions}
         >
           {(option) => <SelectItem key={option.key}>{option.label}</SelectItem>}

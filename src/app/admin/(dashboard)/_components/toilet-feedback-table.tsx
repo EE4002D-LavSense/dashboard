@@ -133,7 +133,7 @@ export default function ToiletFeedbackTable() {
   const ToggleButton = () => {
     return (
       <Button
-        className="flex justify-end"
+        className="max-w-fit"
         onPress={() => {
           const idsToToggle =
             selectedKeys === "all"
