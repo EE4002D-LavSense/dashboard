@@ -36,6 +36,7 @@ export default function ReportForm() {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -96,6 +97,35 @@ export default function ReportForm() {
     const dataTransfer = new DataTransfer();
     dataTransfer.items.add(file);
     return dataTransfer.files;
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    if (!e.dataTransfer.files.length) return;
+
+    const newFiles = Array.from(e.dataTransfer.files);
+    const dataTransfer = new DataTransfer();
+
+    // Append existing files
+    if (files) {
+      Array.from(files).forEach((file) => dataTransfer.items.add(file));
+    }
+
+    // Append new files
+    newFiles.forEach((file) => dataTransfer.items.add(file));
+
+    setFiles(dataTransfer.files); // Update state with new FileList
+    setIsDragging(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -221,8 +251,17 @@ export default function ReportForm() {
             </Select>
 
             {/* Upload Photos/Files */}
-            <label className="mb-2 block font-medium">Upload File(s)</label>
-            <div className="mb-4 flex gap-2">
+            <label className="mb-2 block font-medium">
+              Choose file(s) or drag them here
+            </label>
+            <div
+              className={`mb-4 flex items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all ${
+                isDragging ? "border-blue-500" : "border-gray-300"
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <Input
                 type="file"
                 multiple
