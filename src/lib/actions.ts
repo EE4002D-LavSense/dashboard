@@ -14,6 +14,7 @@ import {
   isAdmin,
 } from "@/lib/queries/select";
 import { getAllToilets } from "@/lib/queries/select";
+import { addFeedback } from "./queries/insert";
 
 export async function getS3FileUrl(key: string) {
   const client = new S3Client({ region: process.env.AWS_REGION });
@@ -62,4 +63,8 @@ export async function checkIsAdmin() {
 
 export async function toggleReportStatusAction(reportIds: number[]) {
   await toggleReportStatus(reportIds);
+}
+
+export async function addFeedbackAction(formData: FormData) {
+  await addFeedback(formData);
 }

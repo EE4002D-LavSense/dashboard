@@ -1,16 +1,9 @@
 "use client";
+import { addFeedbackAction } from "@/lib/actions";
 import { v4 as uuidv4 } from "uuid";
 
 export const updateDatabase = async (formData: FormData) => {
-  try {
-    const response = await fetch("/api/report", {
-      method: "POST",
-      body: formData,
-    });
-    return response;
-  } catch (error) {
-    console.error("Failed to submit form", error);
-  }
+  await addFeedbackAction(formData);
 };
 
 export const uploadFiles = async (files: FileList) => {

@@ -23,6 +23,7 @@ import { FilePreview } from "./file-preview";
 
 import { fetchAllToilets } from "@/lib/actions";
 import { type ToiletInfo } from "@/lib/definitions";
+import { addFeedback } from "@/lib/queries/insert";
 
 export default function ReportForm() {
   const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
@@ -41,8 +42,8 @@ export default function ReportForm() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (dataForm: FormData) => {
-      return updateDatabase(dataForm);
+    mutationFn: async (dataForm: FormData) => {
+      return await updateDatabase(dataForm);
     },
     onSuccess: () => {
       resetInputs();
