@@ -27,9 +27,11 @@ export async function addFeedback(data: FormData) {
   });
 
   const reportId = await getReportId(location, description, remarks);
-  files.forEach(async (filePath: string) => {
-    await db.insert(reportFilesTable).values({ reportId, filePath });
-  });
+  await Promise.all(
+    files.map((filePath: string) =>
+      db.insert(reportFilesTable).values({ reportId, filePath }),
+    ),
+  );
 }
 
 export async function addApiLog(data: {

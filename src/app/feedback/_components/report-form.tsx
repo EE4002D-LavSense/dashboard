@@ -41,8 +41,8 @@ export default function ReportForm() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (dataForm: FormData) => {
-      return await updateDatabase(dataForm);
+    mutationFn: (dataForm: FormData) => {
+      return updateDatabase(dataForm);
     },
     onSuccess: () => {
       resetInputs();
