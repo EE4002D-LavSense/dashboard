@@ -23,7 +23,6 @@ import { FilePreview } from "./file-preview";
 
 import { fetchAllToilets } from "@/lib/actions";
 import { type ToiletInfo } from "@/lib/definitions";
-import { addFeedback } from "@/lib/queries/insert";
 
 export default function ReportForm() {
   const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
