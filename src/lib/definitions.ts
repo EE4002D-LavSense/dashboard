@@ -45,7 +45,7 @@ export type Esp32ToiletData = {
   node_id: string;
   cleanliness: number;
   occupancy: number;
-  water_leak: number;
+  water_leak: boolean;
   temperature: number;
   humidity: number;
 };
