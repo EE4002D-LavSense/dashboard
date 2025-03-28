@@ -11,6 +11,7 @@ import { toggleReportStatus } from "./queries/update";
 import {
   getApiLogs,
   getApiLogsCount,
+  getChartData,
   getMainDashboardData,
   getMainDashboardDataCount,
   getToilet,
@@ -91,4 +92,8 @@ export async function getToiletAction(
   type: string,
 ) {
   return await getToilet(building, floor, type);
+}
+
+export async function fetchChartData(category: string) {
+  return await getChartData(category);
 }

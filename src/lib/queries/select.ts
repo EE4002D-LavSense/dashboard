@@ -202,3 +202,29 @@ export async function getToiletIdFromNodeId(nodeId: string) {
     .where(eq(nodeToToiletIdTable.nodeId, nodeId));
   return res[0].toiletId;
 }
+
+export async function getChartData(category: string) {
+  // Define the mapping between categories and database columns
+  const categoryMap = {
+    occupancy: toiletSensorsTable.occupancy,
+    cleanliness: toiletSensorsTable.cleanliness,
+    waterLeak: toiletSensorsTable.waterLeak,
+    humidity: toiletSensorsTable.humidity,
+    temperature: toiletSensorsTable.temperature,
+  };
+
+  // Ensure the requested category exists, otherwise select all
+  const selectedFields = {
+    timestamp: toiletSensorsTable.timestamp,
+    ...(Object.keys(categoryMap).includes(category)
+      ? { [category]: categoryMap[category as keyof typeof categoryMap] }
+      : categoryMap),
+  };
+
+  const res = await db
+    .select(selectedFields)
+    .from(toiletSensorsTable)
+    .orderBy(toiletSensorsTable.timestamp);
+
+  return res;
+}

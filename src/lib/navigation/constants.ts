@@ -28,3 +28,10 @@ export const navBarItems: {
     public: true,
   },
 ];
+
+export const adminRoutes = [
+  { key: "dashboard", label: "Dashboard", href: "/admin" },
+  { key: "log", label: "API Log", href: "/admin/log" },
+  { key: "analytics", label: "Analytics", href: "/admin/analytics" },
+  { key: "add-toilet", label: "Add Toilet", href: "/admin/add-toilet" },
+];
