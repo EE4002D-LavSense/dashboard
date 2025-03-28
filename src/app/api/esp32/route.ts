@@ -27,7 +27,12 @@ export async function POST(request: Request) {
   });
   // check if data is of type toiletSensorType
   if (isToiletSensorData(data)) {
-    await addToiletSensorData(data);
+    // Transform water_leak from number to boolean
+    const transformedData = {
+      ...data,
+      water_leak: Boolean(data.water_leak),
+    };
+    await addToiletSensorData(transformedData);
   }
   return NextResponse.json({
     message: "received: " + JSON.stringify(data),
