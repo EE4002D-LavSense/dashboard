@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, count, max, inArray } from "drizzle-orm";
+import { eq, and, desc, sql, count, max } from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 

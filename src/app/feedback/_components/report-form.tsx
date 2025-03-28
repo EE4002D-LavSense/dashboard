@@ -22,7 +22,6 @@ import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
 
 import { fetchAllToilets } from "@/lib/actions";
-import { type ToiletInfo } from "@/lib/definitions";
 
 export default function ReportForm() {
   const [location, setLocation] = useState("");

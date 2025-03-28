@@ -1,7 +1,5 @@
 "use client";
 
-import { addToiletAction, getToiletAction } from "@/lib/actions";
-import { ToiletInfo } from "@/lib/definitions";
 import {
   addToast,
   Button,
@@ -15,6 +13,9 @@ import {
 } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+
+import { addToiletAction, getToiletAction } from "@/lib/actions";
+import { type ToiletInfo } from "@/lib/definitions";
 
 export default function AddToiletForm() {
   const [building, setBuilding] = useState("");
