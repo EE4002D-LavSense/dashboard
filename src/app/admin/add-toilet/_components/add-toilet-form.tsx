@@ -110,8 +110,8 @@ export default function AddToiletForm() {
             <Input
               aria-label="Capacity"
               type="number"
-              value={capacity as unknown as string}
-              onChange={(e) => setCapacity(e.target.value as unknown as number)}
+              value={capacity.toString()}
+              onChange={(e) => setCapacity(Number(e.target.value))}
               required
             />
           </div>
