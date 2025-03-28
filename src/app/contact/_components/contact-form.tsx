@@ -66,7 +66,13 @@ export default function ContactForm() {
         required
         className="w-full"
       />
-      <Button type="submit" color="primary" size="lg" className="w-full">
+      <Button
+        aria-label="Submit"
+        type="submit"
+        color="primary"
+        size="lg"
+        className="w-full"
+      >
         Send Message
       </Button>
     </Form>

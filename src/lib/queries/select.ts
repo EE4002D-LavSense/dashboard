@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, count } from "drizzle-orm";
+import { eq, and, desc, sql, count, max } from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 
@@ -9,6 +9,8 @@ import {
   reportFilesTable,
   reportsTable,
   toiletsTable,
+  nodeToToiletIdTable,
+  toiletSensorsTable,
 } from "@/lib/db/schema";
 import { type ToiletReportTable } from "@/lib/definitions";
 
@@ -50,6 +52,47 @@ export async function getReportId(
       ),
     );
   return res[0].id;
+}
+
+export async function getMainDashboardData(page: number, rowsPerPage: number) {
+  const offset = (page - 1) * rowsPerPage; // Calculate the starting row
+  const latestToilet = db
+    .select({
+      toiletId: toiletSensorsTable.toiletId,
+      latest_timestamp: max(toiletSensorsTable.timestamp).as(
+        "latest_timestamp",
+      ),
+    })
+    .from(toiletSensorsTable)
+    .groupBy(toiletSensorsTable.toiletId)
+    .as("latestToilet");
+
+  return await db
+    .select({
+      id: toiletSensorsTable.toiletId,
+      name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
+      gender: toiletsTable.type,
+      cleanliness: toiletSensorsTable.cleanliness,
+      occupancy: sql<string>`CONCAT(${toiletSensorsTable.occupancy}, '/', ${toiletsTable.capacity})`,
+    })
+    .from(toiletSensorsTable)
+    .innerJoin(toiletsTable, eq(toiletsTable.id, toiletSensorsTable.toiletId))
+    .innerJoin(
+      latestToilet,
+      and(eq(toiletSensorsTable.timestamp, latestToilet.latest_timestamp)),
+    )
+    .orderBy(desc(toiletsTable.id))
+    .limit(rowsPerPage)
+    .offset(offset);
+}
+
+export async function getMainDashboardDataCount() {
+  return await db
+    .select({
+      count: count(),
+    })
+    .from(toiletSensorsTable)
+    .groupBy(toiletSensorsTable.toiletId);
 }
 
 export async function getApiLogs(page: number, rowsPerPage: number) {
@@ -150,4 +193,12 @@ export async function isAdmin(userId: string): Promise<boolean> {
     .from(usersTable)
     .where(and(eq(usersTable.id, userId), eq(usersTable.role, "admin")));
   return res.length > 0;
+}
+
+export async function getToiletIdFromNodeId(nodeId: string) {
+  const res = await db
+    .select()
+    .from(nodeToToiletIdTable)
+    .where(eq(nodeToToiletIdTable.nodeId, nodeId));
+  return res[0].toiletId;
 }

@@ -12,7 +12,7 @@ import {
   SelectItem,
   Textarea,
 } from "@heroui/react";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { Camera } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -22,10 +22,8 @@ import { CameraCapture } from "./camera-capture";
 import { FilePreview } from "./file-preview";
 
 import { fetchAllToilets } from "@/lib/actions";
-import { type ToiletInfo } from "@/lib/definitions";
 
 export default function ReportForm() {
-  const [toiletData, setToiletData] = useState<ToiletInfo[]>([]);
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -40,8 +38,14 @@ export default function ReportForm() {
 
   const queryClient = useQueryClient();
 
+  const { data: toilets } = useQuery({
+    queryKey: ["toilets"],
+    queryFn: fetchAllToilets,
+  });
+
   const mutation = useMutation({
     mutationFn: (dataForm: FormData) => {
+      setLoading(true);
       return updateDatabase(dataForm);
     },
     onSuccess: () => {
@@ -55,7 +59,7 @@ export default function ReportForm() {
         queryKey: ["reports"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["totalPage"],
+        queryKey: ["rowPerPage"],
       });
     },
   });
@@ -194,15 +198,6 @@ export default function ReportForm() {
     setIsCameraOpen(false);
   };
 
-  useEffect(() => {
-    const fetchToiletData = async () => {
-      const data = await fetchAllToilets();
-      setToiletData(data);
-    };
-
-    fetchToiletData();
-  }, []);
-
   // Process audio file
   useEffect(() => {
     if (!audioFile) return;
@@ -240,11 +235,11 @@ export default function ReportForm() {
               className="w-full"
               isRequired
             >
-              {toiletData.map((toilet) => (
+              {toilets?.map((toilet) => (
                 <SelectItem key={toilet.id}>
                   {`${toilet.building}-${toilet.floor}-${toilet.type}`}
                 </SelectItem>
-              ))}
+              )) ?? null}
             </Select>
 
             {/* Upload Photos/Files */}
@@ -317,6 +312,7 @@ export default function ReportForm() {
 
             {/* Submit Button */}
             <Button
+              aria-label="Submit"
               type="submit"
               disabled={loading}
               className="mt-2 w-full"

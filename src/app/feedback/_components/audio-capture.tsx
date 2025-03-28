@@ -88,6 +88,7 @@ export function AudioCapture({
         <div className="flex items-center gap-2">
           {!isRecording ? (
             <Button
+              aria-label="Record Audio"
               type="button"
               onPress={startRecording}
               className="flex w-full items-center gap-2 rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600"
@@ -97,6 +98,7 @@ export function AudioCapture({
             </Button>
           ) : (
             <Button
+              aria-label="Stop Recording"
               type="button"
               onPress={stopRecording}
               className="flex w-full items-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-white hover:bg-gray-800"

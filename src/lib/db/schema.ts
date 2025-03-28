@@ -1,5 +1,7 @@
 import {
   integer,
+  real,
+  boolean,
   pgTable,
   varchar,
   text,
@@ -30,6 +32,7 @@ export const toiletsTable = pgTable("toilets", {
   building: varchar("building", { length: 255 }).notNull(),
   floor: varchar("floor", { length: 255 }).notNull(),
   type: varchar("type", { length: 255 }).notNull(), // gender or type of toilet
+  capacity: integer("capacity").default(3).notNull(),
 });
 
 export const reportsTable = pgTable("reports", {
@@ -55,4 +58,24 @@ export const apiLogsTable = pgTable("api_logs", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
   data: text("data").notNull(),
   status: varchar("status", { length: 10 }).notNull(),
+});
+
+export const toiletSensorsTable = pgTable("toilet_sensors", {
+  id: serial("id").primaryKey(),
+  toiletId: integer("toilet_id")
+    .references(() => toiletsTable.id, { onDelete: "cascade" })
+    .notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  cleanliness: integer("cleanliness"),
+  occupancy: integer("occupancy"),
+  humidity: real("humidity"),
+  waterLeak: boolean("water_leak"),
+  temperature: real("temperature"),
+});
+
+export const nodeToToiletIdTable = pgTable("node_to_toilet_id", {
+  nodeId: varchar("node_id", { length: 255 }).primaryKey(),
+  toiletId: integer("toilet_id")
+    .references(() => toiletsTable.id, { onDelete: "cascade" })
+    .notNull(),
 });

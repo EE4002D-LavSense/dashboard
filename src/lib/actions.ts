@@ -4,12 +4,16 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { auth } from "@clerk/nextjs/server";
 
-import { addFeedback } from "./queries/insert";
+import { type ToiletInfo } from "./definitions";
+import { addFeedback, addToilet } from "./queries/insert";
 import { toggleReportStatus } from "./queries/update";
 
 import {
   getApiLogs,
   getApiLogsCount,
+  getMainDashboardData,
+  getMainDashboardDataCount,
+  getToilet,
   getToiletReports,
   getToiletReportsCount,
   isAdmin,
@@ -53,6 +57,14 @@ export async function fetchApiLogs(page: number, rowPerPage: number) {
   }));
 }
 
+export async function fetchMainDashboard(page: number, rowPerPage: number) {
+  return await getMainDashboardData(page, rowPerPage);
+}
+
+export async function fetchMainDashboardCount() {
+  return (await getMainDashboardDataCount())[0].count;
+}
+
 export async function checkIsAdmin() {
   const { userId } = await auth();
   if (!userId) {
@@ -67,4 +79,16 @@ export async function toggleReportStatusAction(reportIds: number[]) {
 
 export async function addFeedbackAction(formData: FormData) {
   await addFeedback(formData);
+}
+
+export async function addToiletAction(data: ToiletInfo) {
+  await addToilet(data);
+}
+
+export async function getToiletAction(
+  building: string,
+  floor: string,
+  type: string,
+) {
+  return await getToilet(building, floor, type);
 }

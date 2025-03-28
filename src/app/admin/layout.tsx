@@ -41,6 +41,7 @@ export default function AdminLayout({
             <Dropdown>
               <DropdownTrigger>
                 <Button
+                  aria-label="More Options"
                   className="h-6 pr-2 text-small"
                   endContent={<ChevronDownIcon className="text-default-500" />}
                   radius="full"

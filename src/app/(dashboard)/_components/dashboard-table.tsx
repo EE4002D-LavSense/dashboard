@@ -8,32 +8,44 @@ import {
   TableRow,
   TableCell,
   Chip,
+  Spinner,
   type ChipProps,
 } from "@heroui/react";
-import React from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-import { DASHBOARD_COLUMNS } from "@/components/table/constants";
-import { mockData } from "@/components/table/mock-data";
+import DashboardHeader from "@/components/common/dashboard-header";
+import {
+  DASHBOARD_COLUMNS,
+  REPORT_ROW_PER_PAGE,
+} from "@/components/table/constants";
+import { fetchMainDashboard, fetchMainDashboardCount } from "@/lib/actions";
 import { type ToiletDashboardData } from "@/lib/definitions";
 
-const occupancyColorMap: Record<string, ChipProps["color"]> = {
-  Free: "success",
-  Busy: "warning",
-  Full: "danger",
+const cleanlinessColorMap: Record<string, ChipProps["color"]> = {
+  0: "success",
+  1: "warning",
+  2: "danger",
 };
 
-const smellColorMap: Record<string, ChipProps["color"]> = {
-  Good: "success",
-  Moderate: "warning",
-  Bad: "danger",
+const mapCleanlinessValue = (value: number) => {
+  switch (value) {
+    case 0:
+      return "Clean";
+    case 1:
+      return "Moderate";
+    case 2:
+      return "Dirty";
+    default:
+      return "Unknown";
+  }
 };
 
 const genderColorMap: Record<string, string> = {
   MALE: "primary",
   FEMALE: "danger",
 };
-
-const toilets = mockData;
 
 const getDashboardColumnByKey = (key: string) => {
   return DASHBOARD_COLUMNS.find((col) => col.uid === key);
@@ -45,6 +57,55 @@ const getResponsiveDashboardColumns = () => {
 };
 
 export default function DashboardTable() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get values from URL or fallback to default
+  const initialPage = Number(searchParams.get("page")) || 1;
+  const initialRows = Number(searchParams.get("rows")) || REPORT_ROW_PER_PAGE;
+
+  const [page, setPage] = useState(initialPage);
+  const [rowPerPage, setRowPerPage] = useState(initialRows);
+
+  const queryClient = useQueryClient();
+
+  const { isFetching, data } = useQuery({
+    queryKey: ["mainDashboard", page, rowPerPage],
+    queryFn: () => fetchMainDashboard(page, rowPerPage),
+  });
+
+  const getTotalPage = async () => {
+    const totalRows = await fetchMainDashboardCount();
+    return Math.ceil(totalRows / rowPerPage);
+  };
+
+  const totalPageQuery = useQuery({
+    queryKey: ["rowPerPage", rowPerPage],
+    queryFn: getTotalPage,
+  });
+
+  const handleReload = () => {
+    queryClient.invalidateQueries({ queryKey: ["mainDashboard"] });
+  };
+
+  const handleReset = () => {
+    setPage(1);
+    queryClient.invalidateQueries({ queryKey: ["mainDashboard"] });
+    queryClient.invalidateQueries({ queryKey: ["rowPerPage"] });
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    setPage(newPage);
+  };
+
+  useEffect(() => {
+    // Update URL when state changes
+    const params = new URLSearchParams();
+    params.set("page", String(page));
+    params.set("rows", String(rowPerPage));
+    router.replace(`?${params.toString()}`);
+  }, [page, rowPerPage, router]);
+
   const renderCell = React.useCallback(
     (toilet: ToiletDashboardData, columnKey: React.Key) => {
       const cellValue = toilet[columnKey as keyof ToiletDashboardData];
@@ -73,26 +134,15 @@ export default function DashboardTable() {
               {cellValue}
             </Chip>
           );
-        case "occupancy":
+        case "cleanliness":
           return (
             <Chip
               className="capitalize"
-              color={occupancyColorMap[toilet.occupancy]}
+              color={cleanlinessColorMap[toilet.cleanliness ?? 0]}
               size="sm"
               variant="flat"
             >
-              {cellValue}
-            </Chip>
-          );
-        case "smell":
-          return (
-            <Chip
-              className="capitalize"
-              color={smellColorMap[toilet.smell]}
-              size="sm"
-              variant="flat"
-            >
-              {cellValue}
+              {mapCleanlinessValue(Number(cellValue) ?? 0)}
             </Chip>
           );
         default:
@@ -103,7 +153,17 @@ export default function DashboardTable() {
   );
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div>
+      <DashboardHeader
+        handleReload={handleReload}
+        loading={isFetching}
+        totalPage={totalPageQuery.data || 0}
+        page={page}
+        handlePageChange={handlePageChange}
+        rowPerPage={rowPerPage}
+        setRowPerPage={setRowPerPage}
+        handleReset={handleReset}
+      />
       <Table aria-label="Main Dashboard Table">
         <TableHeader columns={getResponsiveDashboardColumns()}>
           {(column) => (
@@ -116,7 +176,11 @@ export default function DashboardTable() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={toilets}>
+        <TableBody
+          items={data || []}
+          loadingContent={<Spinner />}
+          loadingState={isFetching ? "loading" : "idle"}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

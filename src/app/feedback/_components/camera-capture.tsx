@@ -92,6 +92,7 @@ export function CameraCapture({
             </div>
             <div className="mt-4 flex justify-between">
               <button
+                aria-label="Close Camera"
                 type="button"
                 onClick={closeCamera}
                 className="rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
@@ -99,6 +100,7 @@ export function CameraCapture({
                 Cancel
               </button>
               <button
+                aria-label="Take Photo"
                 type="button"
                 onClick={takePhoto}
                 className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"

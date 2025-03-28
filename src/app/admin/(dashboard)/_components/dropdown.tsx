@@ -15,6 +15,7 @@ export const renderFileDropdown = (urls: string[]) => {
     <Dropdown>
       <DropdownTrigger>
         <Button
+          aria-label="Files"
           variant="light"
           size="sm"
           endContent={<ChevronDown className="h-4 w-4" />}
