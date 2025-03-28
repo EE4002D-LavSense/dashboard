@@ -1,0 +1,1 @@
+ALTER TABLE "toilets" ADD COLUMN "capacity" integer NOT NULL;

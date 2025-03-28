@@ -2,7 +2,7 @@ export type ToiletDashboardData = {
   id: number;
   name: string;
   gender: string;
-  occupancy: number | null;
+  occupancy: string | null;
   cleanliness: number | null;
 };
 
@@ -10,6 +10,7 @@ export type ToiletInfo = {
   id?: number;
   location?: string | null;
   building: string;
+  capacity: number;
   floor: string;
   type: string;
 };

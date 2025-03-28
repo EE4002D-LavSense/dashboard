@@ -32,6 +32,7 @@ export const toiletsTable = pgTable("toilets", {
   building: varchar("building", { length: 255 }).notNull(),
   floor: varchar("floor", { length: 255 }).notNull(),
   type: varchar("type", { length: 255 }).notNull(), // gender or type of toilet
+  capacity: integer("capacity").default(3).notNull(),
 });
 
 export const reportsTable = pgTable("reports", {
