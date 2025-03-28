@@ -24,8 +24,8 @@ import {
   REPORT_ROW_PER_PAGE,
 } from "@/components/table/constants";
 import {
+  fetchMainDashboardCount,
   fetchReports,
-  fetchReportsCount,
   toggleReportStatusAction,
 } from "@/lib/actions";
 import { type ToiletReportTable } from "@/lib/definitions";
@@ -73,7 +73,7 @@ export default function ToiletFeedbackTable() {
   });
 
   const getTotalPage = async () => {
-    const totalRows = await fetchReportsCount();
+    const totalRows = await fetchMainDashboardCount();
     return Math.ceil(totalRows / rowPerPage);
   };
   const totalPageQuery = useQuery({

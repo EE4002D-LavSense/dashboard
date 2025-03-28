@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, count, max } from "drizzle-orm";
+import { eq, and, desc, sql, count, max, countDistinct } from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 
@@ -89,7 +89,7 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
 export async function getMainDashboardDataCount() {
   return await db
     .select({
-      count: count(),
+      count: countDistinct(toiletSensorsTable.toiletId),
     })
     .from(toiletSensorsTable)
     .groupBy(toiletSensorsTable.toiletId);
