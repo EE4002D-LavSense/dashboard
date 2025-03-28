@@ -85,6 +85,7 @@ export default function DashboardHeader({
         </Button>
 
         <Select
+          aria-label="Rows per page"
           defaultSelectedKeys={[`${rowPerPage}`]}
           onChange={(e) => handleRowChange(e.target.value)}
           className="w-32"
