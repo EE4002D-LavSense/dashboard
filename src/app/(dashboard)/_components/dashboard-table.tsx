@@ -23,11 +23,23 @@ import {
 import { fetchMainDashboard, fetchMainDashboardCount } from "@/lib/actions";
 import { type ToiletDashboardData } from "@/lib/definitions";
 
-
 const cleanlinessColorMap: Record<string, ChipProps["color"]> = {
   0: "success",
   1: "warning",
   2: "danger",
+};
+
+const mapCleanlinessValue = (value: number) => {
+  switch (value) {
+    case 0:
+      return "Clean";
+    case 1:
+      return "Moderate";
+    case 2:
+      return "Dirty";
+    default:
+      return "Unknown";
+  }
 };
 
 const genderColorMap: Record<string, string> = {
@@ -73,12 +85,12 @@ export default function DashboardTable() {
   });
 
   const handleReload = () => {
-    queryClient.invalidateQueries({ queryKey: ["main_dashboard"] });
+    queryClient.invalidateQueries({ queryKey: ["mainDashboard"] });
   };
 
   const handleReset = () => {
     setPage(1);
-    queryClient.invalidateQueries({ queryKey: ["main_dashboard"] });
+    queryClient.invalidateQueries({ queryKey: ["mainDashboard"] });
     queryClient.invalidateQueries({ queryKey: ["rowPerPage"] });
   };
 
@@ -130,7 +142,7 @@ export default function DashboardTable() {
               size="sm"
               variant="flat"
             >
-              {cellValue}
+              {mapCleanlinessValue(Number(cellValue) ?? 0)}
             </Chip>
           );
         default:
@@ -141,7 +153,7 @@ export default function DashboardTable() {
   );
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div>
       <DashboardHeader
         handleReload={handleReload}
         loading={isFetching}

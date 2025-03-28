@@ -56,13 +56,16 @@ export async function getReportId(
 
 export async function getMainDashboardData(page: number, rowsPerPage: number) {
   const offset = (page - 1) * rowsPerPage; // Calculate the starting row
-  const latestToilet = await db
+  const latestToilet = db
     .select({
       toiletId: toiletSensorsTable.toiletId,
-      timestamp: max(toiletSensorsTable.timestamp),
+      latest_timestamp: max(toiletSensorsTable.timestamp).as(
+        "latest_timestamp",
+      ),
     })
     .from(toiletSensorsTable)
-    .groupBy(toiletSensorsTable.toiletId);
+    .groupBy(toiletSensorsTable.toiletId)
+    .as("latestToilet");
 
   return await db
     .select({
@@ -70,17 +73,15 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
       name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
       gender: toiletsTable.type,
       cleanliness: toiletSensorsTable.cleanliness,
-      occupancy: toiletSensorsTable.occupancy,
+      occupancy: sql<string>`CONCAT(${toiletSensorsTable.occupancy}, '/', ${toiletsTable.capacity})`,
     })
     .from(toiletSensorsTable)
     .innerJoin(toiletsTable, eq(toiletsTable.id, toiletSensorsTable.toiletId))
-    .where(
-      inArray(
-        toiletSensorsTable.toiletId,
-        latestToilet.map((x) => x.toiletId),
-      ),
+    .innerJoin(
+      latestToilet,
+      and(eq(toiletSensorsTable.timestamp, latestToilet.latest_timestamp)),
     )
-    .orderBy(desc(toiletSensorsTable.id))
+    .orderBy(desc(toiletsTable.id))
     .limit(rowsPerPage)
     .offset(offset);
 }

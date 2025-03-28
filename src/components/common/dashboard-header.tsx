@@ -74,6 +74,7 @@ export default function DashboardHeader({
       {/* Top section: Reload button and select dropdown */}
       <div className="flex w-full gap-2">
         <Button
+          aria-label="Reload"
           isIconOnly
           onPress={handleReload}
           isLoading={loading}

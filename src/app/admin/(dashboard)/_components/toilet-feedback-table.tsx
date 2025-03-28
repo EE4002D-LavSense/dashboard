@@ -133,6 +133,7 @@ export default function ToiletFeedbackTable() {
   const ToggleButton = () => {
     return (
       <Button
+        aria-label="Toggle Status"
         className="max-w-fit"
         onPress={() => {
           const idsToToggle =
