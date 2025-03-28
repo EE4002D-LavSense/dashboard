@@ -1,14 +1,15 @@
-import { getReportId } from "./select";
+import { getReportId, getToiletIdFromNodeId } from "./select";
 
 import { db } from "@/lib/db";
 import {
   apiLogsTable,
   reportFilesTable,
   reportsTable,
+  toiletSensorsTable,
   toiletsTable,
   usersTable,
 } from "@/lib/db/schema";
-import { type ToiletInfo } from "@/lib/definitions";
+import { type Esp32ToiletData, type ToiletInfo } from "@/lib/definitions";
 
 export async function addToilet(data: ToiletInfo) {
   await db.insert(toiletsTable).values(data);
@@ -52,4 +53,16 @@ export async function addUser(
   await db
     .insert(usersTable)
     .values({ id: userId, first_name, last_name, email });
+}
+
+export async function addToiletSensorData(data: Esp32ToiletData) {
+  const toiletId = await getToiletIdFromNodeId(data.node_id);
+  await db.insert(toiletSensorsTable).values({
+    toiletId: toiletId,
+    cleanliness: data.cleanliness,
+    occupancy: data.occupancy,
+    humidity: data.humidity,
+    waterLeak: data.water_leak === 1,
+    temperature: data.temperature,
+  });
 }

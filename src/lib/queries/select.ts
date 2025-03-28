@@ -9,6 +9,7 @@ import {
   reportFilesTable,
   reportsTable,
   toiletsTable,
+  nodeToToiletIdTable,
 } from "@/lib/db/schema";
 import { type ToiletReportTable } from "@/lib/definitions";
 
@@ -150,4 +151,12 @@ export async function isAdmin(userId: string): Promise<boolean> {
     .from(usersTable)
     .where(and(eq(usersTable.id, userId), eq(usersTable.role, "admin")));
   return res.length > 0;
+}
+
+export async function getToiletIdFromNodeId(nodeId: string) {
+  const res = await db
+    .select()
+    .from(nodeToToiletIdTable)
+    .where(eq(nodeToToiletIdTable.nodeId, nodeId));
+  return res[0].toiletId;
 }

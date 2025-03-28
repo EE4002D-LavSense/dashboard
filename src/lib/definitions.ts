@@ -40,3 +40,23 @@ export type ToiletReportTable = {
   fileUrls?: string[];
   status: string;
 };
+
+export type Esp32ToiletData = {
+  node_id: string;
+  cleanliness: number;
+  occupancy: number;
+  water_leak: number;
+  temperature: number;
+  humidity: number;
+};
+
+export type ToiletSensorData = {
+  id: number;
+  toiletId: number;
+  timestamp: string;
+  cleanliness: number;
+  occupancy: number;
+  humidity: number;
+  waterLeak: boolean;
+  temperature: number;
+};
