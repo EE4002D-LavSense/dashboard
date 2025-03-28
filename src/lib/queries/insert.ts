@@ -49,7 +49,6 @@ export async function addUser(
   last_name: string | null,
   email: string,
 ) {
-  console.log("Adding user", userId, first_name, last_name, email);
   await db
     .insert(usersTable)
     .values({ id: userId, first_name, last_name, email });

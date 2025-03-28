@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, count } from "drizzle-orm";
+import { eq, and, desc, sql, count, max, inArray } from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 
@@ -10,6 +10,7 @@ import {
   reportsTable,
   toiletsTable,
   nodeToToiletIdTable,
+  toiletSensorsTable,
 } from "@/lib/db/schema";
 import { type ToiletReportTable } from "@/lib/definitions";
 
@@ -51,6 +52,46 @@ export async function getReportId(
       ),
     );
   return res[0].id;
+}
+
+export async function getMainDashboardData(page: number, rowsPerPage: number) {
+  const offset = (page - 1) * rowsPerPage; // Calculate the starting row
+  const latestToilet = await db
+    .select({
+      toiletId: toiletSensorsTable.toiletId,
+      timestamp: max(toiletSensorsTable.timestamp),
+    })
+    .from(toiletSensorsTable)
+    .groupBy(toiletSensorsTable.toiletId);
+
+  return await db
+    .select({
+      id: toiletSensorsTable.toiletId,
+      name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
+      gender: toiletsTable.type,
+      cleanliness: toiletSensorsTable.cleanliness,
+      occupancy: toiletSensorsTable.occupancy,
+    })
+    .from(toiletSensorsTable)
+    .innerJoin(toiletsTable, eq(toiletsTable.id, toiletSensorsTable.toiletId))
+    .where(
+      inArray(
+        toiletSensorsTable.toiletId,
+        latestToilet.map((x) => x.toiletId),
+      ),
+    )
+    .orderBy(desc(toiletSensorsTable.id))
+    .limit(rowsPerPage)
+    .offset(offset);
+}
+
+export async function getMainDashboardDataCount() {
+  return await db
+    .select({
+      count: count(),
+    })
+    .from(toiletSensorsTable)
+    .groupBy(toiletSensorsTable.toiletId);
 }
 
 export async function getApiLogs(page: number, rowsPerPage: number) {

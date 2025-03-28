@@ -57,7 +57,7 @@ export default function LogTable() {
   };
 
   const totalPageQuery = useQuery({
-    queryKey: ["totalPage", rowPerPage],
+    queryKey: ["rowPerPage", rowPerPage],
     queryFn: getTotalPage,
   });
 
@@ -68,7 +68,7 @@ export default function LogTable() {
   const handleReset = () => {
     setPage(1);
     queryClient.invalidateQueries({ queryKey: ["logs"] });
-    queryClient.invalidateQueries({ queryKey: ["totalPage"] });
+    queryClient.invalidateQueries({ queryKey: ["rowPerPage"] });
   };
 
   const handlePageChange = async (newPage: number) => {

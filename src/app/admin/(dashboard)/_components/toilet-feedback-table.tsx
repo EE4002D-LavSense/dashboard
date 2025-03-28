@@ -77,7 +77,7 @@ export default function ToiletFeedbackTable() {
     return Math.ceil(totalRows / rowPerPage);
   };
   const totalPageQuery = useQuery({
-    queryKey: ["totalPage", rowPerPage],
+    queryKey: ["rowPerPage", rowPerPage],
     queryFn: getTotalPage,
   });
 
@@ -88,7 +88,7 @@ export default function ToiletFeedbackTable() {
   const handleReset = () => {
     setPage(1);
     queryClient.invalidateQueries({ queryKey: ["reports"] });
-    queryClient.invalidateQueries({ queryKey: ["totalPage"] });
+    queryClient.invalidateQueries({ queryKey: ["rowPerPage"] });
   };
 
   const handlePageChange = (newPage: number) => {

@@ -27,7 +27,6 @@ export default function AddToiletForm() {
       `/api/toilet?building=${building}&floor=${floor}&type=${type}`,
     );
     const existingToilets = await res.json();
-    console.log(existingToilets);
 
     if (existingToilets.length > 0) {
       alert("This toilet already exists!");

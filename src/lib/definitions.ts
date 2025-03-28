@@ -1,10 +1,9 @@
 export type ToiletDashboardData = {
   id: number;
   name: string;
-  location: string;
   gender: string;
-  occupancy: string;
-  smell: string;
+  occupancy: number | null;
+  cleanliness: number | null;
 };
 
 export type ToiletInfo = {

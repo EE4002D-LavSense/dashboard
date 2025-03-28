@@ -10,6 +10,8 @@ import { toggleReportStatus } from "./queries/update";
 import {
   getApiLogs,
   getApiLogsCount,
+  getMainDashboardData,
+  getMainDashboardDataCount,
   getToiletReports,
   getToiletReportsCount,
   isAdmin,
@@ -51,6 +53,14 @@ export async function fetchApiLogs(page: number, rowPerPage: number) {
       timeZone: "Asia/Singapore",
     }),
   }));
+}
+
+export async function fetchMainDashboard(page: number, rowPerPage: number) {
+  return await getMainDashboardData(page, rowPerPage);
+}
+
+export async function fetchMainDashboardCount() {
+  return (await getMainDashboardDataCount())[0].count;
 }
 
 export async function checkIsAdmin() {

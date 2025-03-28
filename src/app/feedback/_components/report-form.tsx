@@ -55,7 +55,7 @@ export default function ReportForm() {
         queryKey: ["reports"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["totalPage"],
+        queryKey: ["rowPerPage"],
       });
     },
   });
