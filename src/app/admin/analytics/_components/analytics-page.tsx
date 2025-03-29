@@ -87,6 +87,15 @@ export default function AnalyticsPage() {
     router.replace(`?${params.toString()}`);
   }, [category, timeRange, toiletId, router]);
 
+  useEffect(() => {
+    const isToiletIdInList = toiletIdList?.some(
+      (toilet) => toilet.toiletId === toiletId,
+    );
+    if (!isToiletIdInList) {
+      setToiletId(toiletIdList?.[0]?.toiletId ?? 0);
+    }
+  }, [toiletIdList]);
+
   return (
     <Card>
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
