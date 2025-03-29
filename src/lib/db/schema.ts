@@ -1,7 +1,6 @@
 import {
   integer,
   real,
-  boolean,
   pgTable,
   varchar,
   text,
@@ -69,7 +68,7 @@ export const toiletSensorsTable = pgTable("toilet_sensors", {
   cleanliness: integer("cleanliness"),
   occupancy: integer("occupancy"),
   humidity: real("humidity"),
-  waterLeak: boolean("water_leak"),
+  waterLeak: integer("water_leak"),
   temperature: real("temperature"),
 });
 

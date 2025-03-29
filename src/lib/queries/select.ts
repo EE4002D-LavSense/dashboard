@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, count, max } from "drizzle-orm";
+import { eq, and, desc, sql, count, max, countDistinct } from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 
@@ -89,7 +89,7 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
 export async function getMainDashboardDataCount() {
   return await db
     .select({
-      count: count(),
+      count: countDistinct(toiletSensorsTable.toiletId),
     })
     .from(toiletSensorsTable)
     .groupBy(toiletSensorsTable.toiletId);
@@ -201,4 +201,30 @@ export async function getToiletIdFromNodeId(nodeId: string) {
     .from(nodeToToiletIdTable)
     .where(eq(nodeToToiletIdTable.nodeId, nodeId));
   return res[0].toiletId;
+}
+
+export async function getChartData(category: string) {
+  // Define the mapping between categories and database columns
+  const categoryMap = {
+    occupancy: toiletSensorsTable.occupancy,
+    cleanliness: toiletSensorsTable.cleanliness,
+    waterLeak: toiletSensorsTable.waterLeak,
+    humidity: toiletSensorsTable.humidity,
+    temperature: toiletSensorsTable.temperature,
+  };
+
+  // Ensure the requested category exists, otherwise select all
+  const selectedFields = {
+    timestamp: toiletSensorsTable.timestamp,
+    ...(Object.keys(categoryMap).includes(category)
+      ? { [category]: categoryMap[category as keyof typeof categoryMap] }
+      : categoryMap),
+  };
+
+  const res = await db
+    .select(selectedFields)
+    .from(toiletSensorsTable)
+    .orderBy(toiletSensorsTable.timestamp);
+
+  return res;
 }

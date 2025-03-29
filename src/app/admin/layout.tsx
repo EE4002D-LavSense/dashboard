@@ -12,6 +12,8 @@ import {
 import { ChevronDownIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+import { adminRoutes } from "@/lib/navigation/constants";
+
 export default function AdminLayout({
   children,
 }: {
@@ -22,6 +24,7 @@ export default function AdminLayout({
     "/admin": "Dashboard",
     "/admin/log": "API Log",
     "/admin/add-toilet": "Add Toilet",
+    "/admin/analytics": "Analytics",
   };
 
   return (
@@ -52,15 +55,11 @@ export default function AdminLayout({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="More Options">
-                <DropdownItem key="dashboard" href="/admin">
-                  Dashboard
-                </DropdownItem>
-                <DropdownItem key="log" href="/admin/log">
-                  API Log
-                </DropdownItem>
-                <DropdownItem key="add-toilet" href="/admin/add-toilet">
-                  Add Toilet
-                </DropdownItem>
+                {adminRoutes.map((route) => (
+                  <DropdownItem key={route.key} href={route.href}>
+                    {route.label}
+                  </DropdownItem>
+                ))}
               </DropdownMenu>
             </Dropdown>
           </BreadcrumbItem>
