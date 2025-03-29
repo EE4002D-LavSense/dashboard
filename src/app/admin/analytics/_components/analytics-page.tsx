@@ -2,7 +2,8 @@
 
 import { Button, Skeleton } from "@heroui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { categories, chartConfig, timeRanges } from "./constants";
@@ -30,8 +31,14 @@ import {
 import { fetchChartData } from "@/lib/actions";
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState("90d");
-  const [category, setCategory] = useState("occupancy");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initialTimeRange = searchParams.get("timeRange") || "90d";
+  const initialCategory = searchParams.get("category") || "occupancy";
+
+  const [timeRange, setTimeRange] = useState(initialTimeRange);
+  const [category, setCategory] = useState(initialCategory);
 
   const queryClient = useQueryClient();
 
@@ -45,6 +52,14 @@ export default function AnalyticsPage() {
   const handleReload = () => {
     queryClient.invalidateQueries({ queryKey: ["analytics"] });
   };
+
+  useEffect(() => {
+    // Update URL when state changes
+    const params = new URLSearchParams();
+    params.set("category", String(category));
+    params.set("timeRange", String(timeRange));
+    router.replace(`?${params.toString()}`);
+  }, [category, timeRange, router]);
 
   return (
     <Card>
