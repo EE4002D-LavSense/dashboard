@@ -237,7 +237,7 @@ export async function getChartData(
 
   // Calculate the start date based on timeRange
   const now = new Date();
-  let startDate = new Date();
+  const startDate = new Date();
 
   if (timeRange === "90d") startDate.setDate(now.getDate() - 90);
   else if (timeRange === "30d") startDate.setDate(now.getDate() - 30);
