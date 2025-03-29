@@ -25,6 +25,7 @@ export default function AdminLayout({
     "/admin/log": "API Log",
     "/admin/add-toilet": "Add Toilet",
     "/admin/analytics": "Analytics",
+    "/admin/config-node": "Config Node",
   };
 
   return (

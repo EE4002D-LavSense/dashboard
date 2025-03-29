@@ -34,4 +34,5 @@ export const adminRoutes = [
   { key: "log", label: "API Log", href: "/admin/log" },
   { key: "analytics", label: "Analytics", href: "/admin/analytics" },
   { key: "add-toilet", label: "Add Toilet", href: "/admin/add-toilet" },
+  { key: "config-node", label: "Config Node", href: "/admin/config-node" },
 ];

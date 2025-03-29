@@ -5,7 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { auth } from "@clerk/nextjs/server";
 
 import { type ToiletInfo } from "./definitions";
-import { addFeedback, addToilet } from "./queries/insert";
+import { addFeedback, addToilet, addToiletNode } from "./queries/insert";
 import { toggleReportStatus } from "./queries/update";
 
 import {
@@ -110,4 +110,8 @@ export async function fetchAllToiletSensorsData() {
 
 export async function fetchAllToiletIdWithSensorsData() {
   return await getAllToiletIdWithSensorsData();
+}
+
+export async function addToiletNodeAction(node: string, toiletId: number) {
+  return await addToiletNode(node, toiletId);
 }
