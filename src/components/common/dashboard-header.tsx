@@ -98,7 +98,7 @@ export default function DashboardHeader({
       </div>
 
       {/* Pagination below on mobile, inline on larger screens */}
-      {totalPage > 0 && (
+      {totalPage > 1 && (
         <div className="flex w-full justify-end">
           <Pagination
             isCompact
