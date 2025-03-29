@@ -233,8 +233,20 @@ export async function getChartData(category: string, toiletId: number) {
 
 export async function getAllToiletSensorsData() {
   const res = await db
-    .select()
-    .from(toiletSensorsTable)
+    .select({
+      name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
+      timestamp: toiletSensorsTable.timestamp,
+      occupancy: toiletSensorsTable.occupancy,
+      cleanliness: toiletSensorsTable.cleanliness,
+      waterLeak: toiletSensorsTable.waterLeak,
+      humidity: toiletSensorsTable.humidity,
+      temperature: toiletSensorsTable.temperature,
+    })
+    .from(toiletsTable)
+    .innerJoin(
+      toiletSensorsTable,
+      eq(toiletsTable.id, toiletSensorsTable.toiletId),
+    )
     .orderBy(toiletSensorsTable.timestamp);
   return res;
 }
