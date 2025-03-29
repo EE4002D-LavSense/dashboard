@@ -295,3 +295,11 @@ export async function getAllToiletIdWithSensorsData() {
     .innerJoin(toiletsTable, eq(toiletsTable.id, toiletWithData.toiletId));
   return res;
 }
+
+export async function getToiletNode(nodeId: string) {
+  const res = await db
+    .select()
+    .from(nodeToToiletIdTable)
+    .where(eq(nodeToToiletIdTable.nodeId, nodeId));
+  return res;
+}

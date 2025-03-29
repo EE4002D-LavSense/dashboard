@@ -17,6 +17,7 @@ import {
   getMainDashboardData,
   getMainDashboardDataCount,
   getToilet,
+  getToiletNode,
   getToiletReports,
   getToiletReportsCount,
   isAdmin,
@@ -113,5 +114,9 @@ export async function fetchAllToiletIdWithSensorsData() {
 }
 
 export async function addToiletNodeAction(node: string, toiletId: number) {
+  const exists = await getToiletNode(node);
+  if (exists.length > 0) {
+    throw new Error("Node already exists!");
+  }
   return await addToiletNode(node, toiletId);
 }

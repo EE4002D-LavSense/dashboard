@@ -19,12 +19,13 @@ import { addToiletNodeAction, fetchAllToilets } from "@/lib/actions";
 export default function ConfigNodeForm() {
   const [node, setNode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [toiletId, setToiletId] = useState(0);
+  const [toiletId, setToiletId] = useState<number | null>(0);
 
   const queryClient = useQueryClient();
 
   const resetInputs = () => {
     setNode("");
+    setToiletId(null);
     setLoading(false);
   };
 
@@ -47,12 +48,28 @@ export default function ConfigNodeForm() {
       resetInputs();
       setLoading(false);
     },
+    onError: (error) => {
+      addToast({
+        title: "Error",
+        description: error.message,
+        color: "danger",
+      });
+      setLoading(false);
+    },
   });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     // Send POST request
+    if (!node || !toiletId) {
+      addToast({
+        title: "Error",
+        description: "Please fill in all fields.",
+        color: "danger",
+      });
+      return;
+    }
     addToiletNodeMutation.mutate({ node, toiletId });
   }
 
@@ -77,11 +94,11 @@ export default function ConfigNodeForm() {
           </div>
           <Select
             label="Select location"
-            selectedKeys={toiletId ? new Set([toiletId]) : new Set()}
+            selectedKeys={toiletId ? [toiletId.toString()] : []} // Ensure it resets
             onSelectionChange={(keys) => {
               const selectedKey = Array.from(keys)[0]; // Extract first key
               if (typeof selectedKey === "string") {
-                setToiletId(Number(selectedKey)); // Ensure it's a string before updating state
+                setToiletId(Number(selectedKey)); // Update state
               }
             }}
             className="w-full"
