@@ -52,8 +52,8 @@
       "name": "node_to_toilet_id",
       "schema": "",
       "columns": {
-        "node_id": {
-          "name": "node_id",
+        "node_address": {
+          "name": "node_address",
           "type": "varchar(255)",
           "primaryKey": true,
           "notNull": true

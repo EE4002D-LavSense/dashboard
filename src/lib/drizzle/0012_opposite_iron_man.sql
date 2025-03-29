@@ -1,5 +1,5 @@
 CREATE TABLE "node_to_toilet_id" (
-	"node_id" varchar(255) PRIMARY KEY NOT NULL,
+	"node_address" varchar(255) PRIMARY KEY NOT NULL,
 	"toilet_id" integer NOT NULL
 );
 --> statement-breakpoint

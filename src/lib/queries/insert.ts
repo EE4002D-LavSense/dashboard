@@ -55,7 +55,7 @@ export async function addUser(
 }
 
 export async function addToiletSensorData(data: Esp32ToiletData) {
-  const toiletId = await getToiletIdFromNodeId(data.node_id);
+  const toiletId = await getToiletIdFromNodeId(data.node_address);
   await db.insert(toiletSensorsTable).values({
     toiletId: toiletId,
     cleanliness: data.cleanliness,

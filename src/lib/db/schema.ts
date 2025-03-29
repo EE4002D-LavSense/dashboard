@@ -73,7 +73,7 @@ export const toiletSensorsTable = pgTable("toilet_sensors", {
 });
 
 export const nodeToToiletIdTable = pgTable("node_to_toilet_id", {
-  nodeId: varchar("node_id", { length: 255 }).primaryKey(),
+  nodeId: varchar("node_address", { length: 255 }).primaryKey(),
   toiletId: integer("toilet_id")
     .references(() => toiletsTable.id, { onDelete: "cascade" })
     .notNull(),

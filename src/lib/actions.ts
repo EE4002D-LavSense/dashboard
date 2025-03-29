@@ -9,6 +9,8 @@ import { addFeedback, addToilet } from "./queries/insert";
 import { toggleReportStatus } from "./queries/update";
 
 import {
+  getAllToiletIdWithSensorsData,
+  getAllToiletSensorsData,
   getApiLogs,
   getApiLogsCount,
   getChartData,
@@ -94,6 +96,14 @@ export async function getToiletAction(
   return await getToilet(building, floor, type);
 }
 
-export async function fetchChartData(category: string) {
-  return await getChartData(category);
+export async function fetchChartData(category: string, toiletId: number) {
+  return await getChartData(category, toiletId);
+}
+
+export async function fetchAllToiletSensorsData() {
+  return await getAllToiletSensorsData();
+}
+
+export async function fetchAllToiletIdWithSensorsData() {
+  return await getAllToiletIdWithSensorsData();
 }

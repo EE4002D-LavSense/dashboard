@@ -1,6 +1,6 @@
 {
-  "id": "aced611a-b93e-41b5-832d-10f7051e7cf3",
-  "prevId": "050c689f-4f46-421b-8191-48c4d3333bef",
+  "id": "5f106a9b-d0f5-4e20-8d71-d5793d371ff8",
+  "prevId": "4c5df936-5b63-4da4-8779-bccd06ef7d34",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -227,7 +227,7 @@
         },
         "water_leak": {
           "name": "water_leak",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -293,6 +293,13 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "capacity": {
+          "name": "capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 3
         }
       },
       "indexes": {},

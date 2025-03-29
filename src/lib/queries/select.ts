@@ -203,7 +203,7 @@ export async function getToiletIdFromNodeId(nodeId: string) {
   return res[0].toiletId;
 }
 
-export async function getChartData(category: string) {
+export async function getChartData(category: string, toiletId: number) {
   // Define the mapping between categories and database columns
   const categoryMap = {
     occupancy: toiletSensorsTable.occupancy,
@@ -216,6 +216,7 @@ export async function getChartData(category: string) {
   // Ensure the requested category exists, otherwise select all
   const selectedFields = {
     timestamp: toiletSensorsTable.timestamp,
+    toiletId: toiletSensorsTable.toiletId,
     ...(Object.keys(categoryMap).includes(category)
       ? { [category]: categoryMap[category as keyof typeof categoryMap] }
       : categoryMap),
@@ -224,7 +225,34 @@ export async function getChartData(category: string) {
   const res = await db
     .select(selectedFields)
     .from(toiletSensorsTable)
+    .where(eq(toiletSensorsTable.toiletId, toiletId))
     .orderBy(toiletSensorsTable.timestamp);
 
+  return res;
+}
+
+export async function getAllToiletSensorsData() {
+  const res = await db
+    .select()
+    .from(toiletSensorsTable)
+    .orderBy(toiletSensorsTable.timestamp);
+  return res;
+}
+
+export async function getAllToiletIdWithSensorsData() {
+  const toiletWithData = db
+    .select({
+      toiletId: toiletSensorsTable.toiletId,
+    })
+    .from(toiletSensorsTable)
+    .groupBy(toiletSensorsTable.toiletId)
+    .as("toiletWithData");
+  const res = await db
+    .select({
+      toiletId: toiletWithData.toiletId,
+      name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
+    })
+    .from(toiletWithData)
+    .innerJoin(toiletsTable, eq(toiletsTable.id, toiletWithData.toiletId));
   return res;
 }

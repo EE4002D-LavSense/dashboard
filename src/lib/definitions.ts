@@ -42,7 +42,7 @@ export type ToiletReportTable = {
 };
 
 export type Esp32ToiletData = {
-  node_id: string;
+  node_address: string;
   cleanliness: number;
   occupancy: number;
   water_leak: number;

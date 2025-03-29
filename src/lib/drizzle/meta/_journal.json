@@ -99,6 +99,13 @@
       "when": 1743162407247,
       "tag": "0013_funny_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1743229482384,
+      "tag": "0014_lame_black_tarantula",
+      "breakpoints": true
     }
   ]
 }

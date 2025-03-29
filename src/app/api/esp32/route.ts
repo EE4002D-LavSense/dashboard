@@ -9,7 +9,7 @@ function isToiletSensorData(data: unknown): data is Esp32ToiletData {
   }
 
   return (
-    "node_id" in data &&
+    "node_address" in data &&
     "cleanliness" in data &&
     "occupancy" in data &&
     "water_leak" in data &&
