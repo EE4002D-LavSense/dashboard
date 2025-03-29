@@ -4,7 +4,7 @@ import { Button, Skeleton } from "@heroui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveAs } from "file-saver";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { categories, chartConfig, timeRanges } from "./constants";
@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { data: toiletIdList } = useQuery({
+  const { isFetched: toiletIdFetched, data: toiletIdList } = useQuery({
     queryKey: ["toiletIdList"],
     queryFn: () => fetchAllToiletIdWithSensorsData(),
   });
@@ -87,14 +87,20 @@ export default function AnalyticsPage() {
     router.replace(`?${params.toString()}`);
   }, [category, timeRange, toiletId, router]);
 
+  const hasSetToiletId = useRef(false);
+
   useEffect(() => {
+    if (hasSetToiletId.current || !toiletIdFetched) return; // Prevent re-execution after first run
+
     const isToiletIdInList = toiletIdList?.some(
       (toilet) => toilet.toiletId === toiletId,
     );
+
     if (!isToiletIdInList) {
       setToiletId(toiletIdList?.[0]?.toiletId ?? 0);
+      hasSetToiletId.current = true; // Mark as executed
     }
-  }, [toiletIdList]);
+  }, [toiletIdList, toiletId, toiletIdFetched]);
 
   return (
     <Card>
