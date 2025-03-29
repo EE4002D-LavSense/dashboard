@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveAs } from "file-saver";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { categories, chartConfig, timeRanges } from "./constants";
 
@@ -202,6 +202,14 @@ export default function AnalyticsPage() {
                     timeZone: "Asia/Singapore",
                   });
                 }}
+              />
+              <YAxis
+                dataKey={category}
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                domain={["auto", "auto"]}
+                allowDataOverflow={true}
               />
               <ChartTooltip
                 cursor={false}
