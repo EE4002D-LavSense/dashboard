@@ -61,7 +61,7 @@ export async function addToiletSensorData(data: Esp32ToiletData) {
     cleanliness: data.cleanliness,
     occupancy: data.occupancy,
     humidity: data.humidity,
-    waterLeak: data.water_leak === 1,
+    waterLeak: data.water_leak,
     temperature: data.temperature,
   });
 }

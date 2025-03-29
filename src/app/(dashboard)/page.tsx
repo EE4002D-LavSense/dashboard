@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import DashboardTable from "@/app/(dashboard)/_components/dashboard-table";
 import Title from "@/components/common/title";
 import { TableShell } from "@/components/layouts/table-shell";
@@ -9,7 +11,9 @@ export default function DashboardPage() {
         <Title title="Dashboard" />
       </div>
       <TableShell>
-        <DashboardTable />
+        <Suspense>
+          <DashboardTable />
+        </Suspense>
       </TableShell>
     </>
   );
