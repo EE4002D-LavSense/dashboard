@@ -56,9 +56,9 @@ export default function AnalyticsPage() {
   const queryClient = useQueryClient();
 
   const { isFetching, data: chartData } = useQuery({
-    queryKey: ["analytics", category, toiletId],
+    queryKey: ["analytics", category, toiletId, timeRange],
     queryFn: () => {
-      return fetchChartData(category, toiletId);
+      return fetchChartData(category, toiletId, timeRange);
     },
   });
 

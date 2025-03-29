@@ -96,8 +96,12 @@ export async function getToiletAction(
   return await getToilet(building, floor, type);
 }
 
-export async function fetchChartData(category: string, toiletId: number) {
-  return await getChartData(category, toiletId);
+export async function fetchChartData(
+  category: string,
+  toiletId: number,
+  timeRange: string,
+) {
+  return await getChartData(category, toiletId, timeRange);
 }
 
 export async function fetchAllToiletSensorsData() {

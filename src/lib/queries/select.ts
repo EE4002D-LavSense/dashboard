@@ -1,4 +1,13 @@
-import { eq, and, desc, sql, count, max, countDistinct } from "drizzle-orm";
+import {
+  eq,
+  and,
+  desc,
+  sql,
+  count,
+  max,
+  countDistinct,
+  gte,
+} from "drizzle-orm";
 
 import { getS3FileUrl } from "../actions";
 
@@ -203,7 +212,11 @@ export async function getToiletIdFromNodeId(nodeId: string) {
   return res[0].toiletId;
 }
 
-export async function getChartData(category: string, toiletId: number) {
+export async function getChartData(
+  category: string,
+  toiletId: number,
+  timeRange: string,
+) {
   // Define the mapping between categories and database columns
   const categoryMap = {
     occupancy: toiletSensorsTable.occupancy,
@@ -222,10 +235,24 @@ export async function getChartData(category: string, toiletId: number) {
       : categoryMap),
   };
 
+  // Calculate the start date based on timeRange
+  const now = new Date();
+  let startDate = new Date();
+
+  if (timeRange === "90d") startDate.setDate(now.getDate() - 90);
+  else if (timeRange === "30d") startDate.setDate(now.getDate() - 30);
+  else if (timeRange === "7d") startDate.setDate(now.getDate() - 7);
+
+  // Fetch only data within the time range
   const res = await db
     .select(selectedFields)
     .from(toiletSensorsTable)
-    .where(eq(toiletSensorsTable.toiletId, toiletId))
+    .where(
+      and(
+        eq(toiletSensorsTable.toiletId, toiletId),
+        gte(toiletSensorsTable.timestamp, startDate),
+      ),
+    )
     .orderBy(toiletSensorsTable.timestamp);
 
   return res;
