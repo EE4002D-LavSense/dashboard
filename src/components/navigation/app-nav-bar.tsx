@@ -38,7 +38,7 @@ export function AppNavBar() {
     return await checkIsAdmin();
   };
 
-  const isAdmin = useQuery({
+  const { data: isAdmin } = useQuery({
     queryKey: ["isAdmin"],
     queryFn: getAdminStatus,
   });
@@ -68,26 +68,21 @@ export function AppNavBar() {
       </NavbarContent>
 
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        {navBarItems.map((navItem) =>
-          navItem.public ? (
-            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
-              <Link
-                href={navItem.href}
-                color={isSamePath(navItem.href) ? "primary" : "foreground"}
+        {navBarItems.map(
+          (navItem) =>
+            (navItem.public || isAdmin) && (
+              <NavbarItem
+                key={navItem.href}
+                isActive={isSamePath(navItem.href)}
               >
-                {navItem.name}
-              </Link>
-            </NavbarItem>
-          ) : isAdmin.data ? (
-            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
-              <Link
-                href={navItem.href}
-                color={isSamePath(navItem.href) ? "primary" : "foreground"}
-              >
-                {navItem.name}
-              </Link>
-            </NavbarItem>
-          ) : null,
+                <Link
+                  href={navItem.href}
+                  color={isSamePath(navItem.href) ? "primary" : "foreground"}
+                >
+                  {navItem.name}
+                </Link>
+              </NavbarItem>
+            ),
         )}
         <ThemeSwitch />
       </NavbarContent>
@@ -100,30 +95,20 @@ export function AppNavBar() {
         <UserButton />
       </SignedIn>
       <NavbarMenu>
-        {navBarItems.map((navItem) =>
-          navItem.public ? (
-            <NavbarMenuItem key={navItem.href}>
-              <Link
-                href={navItem.href}
-                color={isSamePath(navItem.href) ? "primary" : "foreground"}
-                className="w-full"
-                onPress={closeMenu}
-              >
-                {navItem.name}
-              </Link>
-            </NavbarMenuItem>
-          ) : isAdmin.data ? (
-            <NavbarItem key={navItem.href} isActive={isSamePath(navItem.href)}>
-              <Link
-                href={navItem.href}
-                color={isSamePath(navItem.href) ? "primary" : "foreground"}
-                className="w-full"
-                onPress={closeMenu}
-              >
-                {navItem.name}
-              </Link>
-            </NavbarItem>
-          ) : null,
+        {navBarItems.map(
+          (navItem) =>
+            (navItem.public || isAdmin) && (
+              <NavbarMenuItem key={navItem.href}>
+                <Link
+                  href={navItem.href}
+                  color={isSamePath(navItem.href) ? "primary" : "foreground"}
+                  className="w-full"
+                  onPress={closeMenu}
+                >
+                  {navItem.name}
+                </Link>
+              </NavbarMenuItem>
+            ),
         )}
         <ThemeSwitch />
       </NavbarMenu>
