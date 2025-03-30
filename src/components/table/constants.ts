@@ -3,6 +3,7 @@ export const DASHBOARD_COLUMNS = [
   { name: "GENDER", uid: "gender", hideOnMobile: true },
   { name: "OCCUPANCY", uid: "occupancy", hideOnMobile: false },
   { name: "CLEANLINESS", uid: "cleanliness", hideOnMobile: false },
+  { name: "STATUS", uid: "timestamp", hideOnMobile: true },
 ];
 
 export const REPORTS_COLUMNS = [

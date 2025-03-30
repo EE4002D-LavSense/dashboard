@@ -83,6 +83,7 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
       gender: toiletsTable.type,
       cleanliness: toiletSensorsTable.cleanliness,
       occupancy: sql<string>`CONCAT(${toiletSensorsTable.occupancy}, '/', ${toiletsTable.capacity})`,
+      timestamp: sql<string>`CONCAT(${latestToilet.latest_timestamp})`,
     })
     .from(toiletSensorsTable)
     .innerJoin(toiletsTable, eq(toiletsTable.id, toiletSensorsTable.toiletId))

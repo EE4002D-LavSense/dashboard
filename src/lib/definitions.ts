@@ -4,6 +4,7 @@ export type ToiletDashboardData = {
   gender: string;
   occupancy: string | null;
   cleanliness: number | null;
+  timestamp: string | null;
 };
 
 export type ToiletInfo = {

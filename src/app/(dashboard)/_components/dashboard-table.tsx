@@ -109,11 +109,23 @@ export default function DashboardTable() {
   const renderCell = React.useCallback(
     (toilet: ToiletDashboardData, columnKey: React.Key) => {
       const cellValue = toilet[columnKey as keyof ToiletDashboardData];
+      const timestamp = toilet.timestamp
+        ? new Date(toilet.timestamp).getTime()
+        : 0;
+      const isOnline =
+        new Date().getTime() - new Date(timestamp).getTime() <
+        24 * 60 * 60 * 1000;
 
       switch (columnKey) {
         case "name":
           return (
-            <div className="flex flex-col">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <span
+                className="ml-2 text-xs md:hidden"
+                style={{ color: isOnline ? "green" : "red" }}
+              >
+                {isOnline ? "Online" : "Offline"}
+              </span>
               <p className="text-bold text-sm capitalize">{cellValue}</p>
             </div>
           );
@@ -143,6 +155,17 @@ export default function DashboardTable() {
               variant="flat"
             >
               {mapCleanlinessValue(Number(cellValue) ?? 0)}
+            </Chip>
+          );
+        case "timestamp":
+          return (
+            <Chip
+              className="capitalize"
+              color={isOnline ? "success" : "danger"}
+              size="sm"
+              variant="flat"
+            >
+              {isOnline ? "Online" : "Offline"}
             </Chip>
           );
         default:
