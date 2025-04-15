@@ -82,7 +82,7 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
       name: sql<string>`CONCAT(${toiletsTable.building}, '-', ${toiletsTable.floor}, '-', ${toiletsTable.type})`,
       gender: toiletsTable.type,
       cleanliness: toiletSensorsTable.cleanliness,
-      occupancy: sql<string>`CONCAT(${toiletSensorsTable.occupancy}, '/', ${toiletsTable.capacity})`,
+      occupancy: sql<string>`CONCAT(LEAST(${toiletSensorsTable.occupancy}, ${toiletsTable.capacity}), '/', ${toiletsTable.capacity})`,
       timestamp: sql<string>`CONCAT(${latestToilet.latest_timestamp})`,
     })
     .from(toiletSensorsTable)
