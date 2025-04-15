@@ -3,6 +3,7 @@ import { getReportId, getToiletIdFromNodeId } from "./select";
 import { db } from "@/lib/db";
 import {
   apiLogsTable,
+  nodeStatusTable,
   nodeToToiletIdTable,
   reportFilesTable,
   reportsTable,
@@ -64,6 +65,16 @@ export async function addToiletSensorData(data: Esp32ToiletData) {
     humidity: data.humidity,
     waterLeak: data.water_leak,
     temperature: data.temperature,
+  });
+}
+
+export async function addHeartBeatData(data: {
+  node_address: string;
+  heartbeat_status: number;
+}) {
+  await db.insert(nodeStatusTable).values({
+    nodeId: data.node_address,
+    heartbeatStatus: data.heartbeat_status,
   });
 }
 

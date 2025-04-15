@@ -20,6 +20,7 @@ import {
   toiletsTable,
   nodeToToiletIdTable,
   toiletSensorsTable,
+  nodeStatusTable,
 } from "@/lib/db/schema";
 import { type ToiletReportTable } from "@/lib/definitions";
 
@@ -76,6 +77,35 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
     .groupBy(toiletSensorsTable.toiletId)
     .as("latestToilet");
 
+  const latestHeartBeatData = db
+    .select({
+      nodeId: nodeStatusTable.nodeId,
+      latest_timestamp: max(nodeStatusTable.timestamp).as("latest_timestamp"),
+    })
+    .from(nodeStatusTable)
+    .groupBy(nodeStatusTable.nodeId)
+    .as("latestHeartBeatData");
+
+  const latestHeartBeatStatus = db
+    .select({
+      nodeId: latestHeartBeatData.nodeId,
+      toiletId: nodeToToiletIdTable.toiletId,
+      heartBeatStatus: nodeStatusTable.heartbeatStatus,
+    })
+    .from(nodeStatusTable)
+    .innerJoin(
+      latestHeartBeatData,
+      and(
+        eq(nodeStatusTable.nodeId, latestHeartBeatData.nodeId),
+        eq(latestHeartBeatData.latest_timestamp, nodeStatusTable.timestamp),
+      ),
+    )
+    .innerJoin(
+      nodeToToiletIdTable,
+      eq(nodeToToiletIdTable.nodeId, latestHeartBeatData.nodeId),
+    )
+    .as("latestHeartBeatStatus");
+
   return await db
     .select({
       id: toiletSensorsTable.toiletId,
@@ -84,12 +114,17 @@ export async function getMainDashboardData(page: number, rowsPerPage: number) {
       cleanliness: toiletSensorsTable.cleanliness,
       occupancy: sql<string>`CONCAT(LEAST(${toiletSensorsTable.occupancy}, ${toiletsTable.capacity}), '/', ${toiletsTable.capacity})`,
       timestamp: sql<string>`CONCAT(${latestToilet.latest_timestamp})`,
+      heartBeatStatus: latestHeartBeatStatus.heartBeatStatus,
     })
     .from(toiletSensorsTable)
     .innerJoin(toiletsTable, eq(toiletsTable.id, toiletSensorsTable.toiletId))
     .innerJoin(
       latestToilet,
       and(eq(toiletSensorsTable.timestamp, latestToilet.latest_timestamp)),
+    )
+    .leftJoin(
+      latestHeartBeatStatus,
+      eq(toiletSensorsTable.toiletId, latestHeartBeatStatus.toiletId),
     )
     .orderBy(desc(toiletsTable.id))
     .limit(rowsPerPage)

@@ -78,3 +78,12 @@ export const nodeToToiletIdTable = pgTable("node_to_toilet_id", {
     .references(() => toiletsTable.id, { onDelete: "cascade" })
     .notNull(),
 });
+
+export const nodeStatusTable = pgTable("node_status", {
+  id: serial("id").primaryKey(),
+  nodeId: varchar("node_address", { length: 255 })
+    .references(() => nodeToToiletIdTable.nodeId, { onDelete: "cascade" })
+    .notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  heartbeatStatus: integer("heartbeat_status").notNull(),
+});

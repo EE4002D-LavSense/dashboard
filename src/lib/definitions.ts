@@ -5,6 +5,7 @@ export type ToiletDashboardData = {
   occupancy: string | null;
   cleanliness: number | null;
   timestamp: string | null;
+  heartBeatStatus: number | null;
 };
 
 export type ToiletInfo = {
@@ -49,6 +50,11 @@ export type Esp32ToiletData = {
   water_leak: number;
   temperature: number;
   humidity: number;
+};
+
+export type HeartBeatData = {
+  node_address: string;
+  heartbeat_status: number;
 };
 
 export type ToiletSensorData = {
