@@ -109,8 +109,14 @@ export default function DashboardTable() {
   const renderCell = React.useCallback(
     (toilet: ToiletDashboardData, columnKey: React.Key) => {
       const cellValue = toilet[columnKey as keyof ToiletDashboardData];
+      const timestamp = toilet.timestamp
+        ? new Date(toilet.timestamp).getTime()
+        : 0;
       const isOnline =
-        toilet.heartBeatStatus !== null && toilet.heartBeatStatus !== 2;
+        toilet.heartBeatStatus !== null &&
+        toilet.heartBeatStatus !== 2 &&
+        new Date().getTime() - new Date(timestamp).getTime() <
+          24 * 60 * 60 * 1000;
 
       switch (columnKey) {
         case "name":
