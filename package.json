@@ -28,6 +28,7 @@
     "@aws-sdk/s3-request-presigner": "^3.758.0",
     "@clerk/nextjs": "^6.12.8",
     "@deepgram/sdk": "^3.11.2",
+    "@emailjs/browser": "^4.4.1",
     "@heroui/react": "2.7.5",
     "@neondatabase/api-client": "^1.11.5",
     "@neondatabase/serverless": "^0.10.4",

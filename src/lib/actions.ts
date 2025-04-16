@@ -3,13 +3,11 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { auth } from "@clerk/nextjs/server";
-import { Resend } from "resend";
 
 import { type ToiletInfo } from "./definitions";
 import { addFeedback, addToilet, addToiletNode } from "./queries/insert";
 import { toggleReportStatus } from "./queries/update";
 
-import { EmailTemplate } from "@/components/common/email-template";
 import {
   getAllToiletIdWithSensorsData,
   getAllToiletSensorsData,
@@ -121,28 +119,4 @@ export async function addToiletNodeAction(node: string, toiletId: number) {
     throw new Error("Node already exists!");
   }
   return await addToiletNode(node, toiletId);
-}
-
-export async function sendContactMessage(
-  name: string,
-  email: string,
-  subject: string,
-  message: string,
-) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  try {
-    const { data, error } = await resend.emails.send({
-      from: "email",
-      to: ["non.k@u.nus.edu"],
-      subject: subject,
-      react: EmailTemplate({ name, email, subject, message }),
-    });
-
-    if (error) {
-      return error;
-    }
-    return data;
-  } catch (error) {
-    return error;
-  }
 }
